@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theo Xiong</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="static/files/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/files/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/files/favicons/favicon-16x16.png">
+    <link rel="manifest" href="static/files/favicons/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500;700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600&family=Source+Sans+Pro:wght@400;600&family=Nunito+Sans:wght@400;600&family=Work+Sans:wght@400;500&family=Poppins:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="controls">
+        <div class="theme-toggle" id="themeToggle" title="Toggle dark/light mode"></div>
+        <div class="font-selector">
+            <div class="dropdown" id="fontDropdown">
+                <div class="dropdown-selected" id="dropdownSelected">
+                    <span>Open Sans</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="dropdown-options" id="dropdownOptions">
+                    <div class="dropdown-option" data-value="opensans">Open Sans</div>
+                    <div class="dropdown-option" data-value="lato">Lato</div>
+                    <div class="dropdown-option" data-value="system">System Default</div>
+                    <div class="dropdown-option" data-value="inter">Inter</div>
+                    <div class="dropdown-option" data-value="roboto">Roboto</div>
+                    <div class="dropdown-option" data-value="sourcesans">Source Sans Pro</div>
+                    <div class="dropdown-option" data-value="nunito">Nunito Sans</div>
+                    <div class="dropdown-option" data-value="worksans">Work Sans</div>
+                    <div class="dropdown-option" data-value="poppins">Poppins</div>
+                    <div class="dropdown-option" data-value="ibmplex">IBM Plex Sans</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#tech-stack">Tech Stack</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Theo Xiong</h1>
+        <p>Computer Engineering @ UIUC "May 26</p>
+    </header>
+
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>I try to build useful stuff that please the eye.</p>
+        <p>Aside from coding, I also enjoy poker, chess, tennis and basketball.</p>
+        <p>Scroll around to learn more about my technical abilities.</p>
+    </section>
+
+    <section id="tech-stack" class="section">
+        <h2>Tech Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-domain">
+                <div class="tech-items">
+                    <span class="tech-item featured">Flask</span>
+                    <span class="tech-item featured">React</span>
+                    <span class="tech-item">Tailwind</span>
+                    <span class="tech-item">PostgreSQL</span>
+                    <span class="tech-item">Docker</span>
+                    <span class="tech-item">Railway</span>
+                </div>
+            </div>
+            
+            <div class="tech-domain">
+                <div class="tech-items">
+                    <span class="tech-item featured">Python</span>
+                    <span class="tech-item">Torch</span>
+                    <span class="tech-item">Pandas</span>
+                    <span class="tech-item">NumPy</span>
+                    <span class="tech-item">openCV</span>
+                    <span class="tech-item">Seaborn</span>
+                </div>
+            </div>
+
+            <div class="tech-domain">
+                <div class="tech-items">
+                    <span class="tech-item featured">C/C++</span>
+                    <span class="tech-item">SystemVerilog</span>
+                    <span class="tech-item">Verilog</span>
+                    <span class="tech-item">RISC-V</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <h2>Projects</h2>
+        <ul class="project-list">
+            <li>
+                <div class="project-title">
+                    <div class="project-title"><a href="https://instatruth.app/" target="_blank">InstaTruth.app</a></div>
+                </div>
+                <div class="project-desc">Verify the truthfulness of video shorts using custom trained BERT NLP & multi-step web verification.</div>
+                <div class="project-tech">
+                    <span class="tech-tag">Torch</span>
+                    <span class="tech-tag">BERT</span>
+                    <span class="tech-tag">OpenAI SDK</span>
+                    <span class="tech-tag">Google Search API</span>
+                </div>
+            </li>
+             <li>
+                <div class="project-title">
+                    <div class="project-title"><a href="https://pokerbuddy.app/" target="_blank">PokerBuddy.app</a></div>
+                </div>
+                <div class="project-desc">The best web-based poker tracker with advanced analytics.</div>
+                <div class="project-tech">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                </div>
+            </li>
+            <!-- <li>
+                <div class="project-title">
+                    <span class="coming-soon">
+                        BetGlobal.win
+                        <div class="coming-soon-feedback">Coming Soon!</div>
+                    </span>
+                </div>
+                <div class="project-desc">New way of gambling. P2P & Zero Fees.</div>
+                <div class="project-tech">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">AWS EC2</span>
+                    <span class="tech-tag">Stripe API</span>
+                </div>
+            </li> -->
+            <li>
+                <div class="project-title"><a href="https://www.betgloballive.com/" target="_blank">BetGlobalLive.com</a></div>
+                <div class="project-desc">New way of gambling. P2P & Zero Fees.</div>
+                <div class="project-tech">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">AWS EC2</span>
+                    <span class="tech-tag">Stripe API</span>
+                </div>
+            </li>
+            <li>
+                <div class="project-title"><a href="https://www.risc-view.com/" target="_blank">Risc-View.com</a></div>
+                <div class="project-desc">The best RISC-V instruction lookup tool. Loved by ECE 391 students.</div>
+                <div class="project-tech">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Tailwind</span>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section id="experience" class="section">
+        <h2>Experience</h2>
+        <ul class="job-list">
+            <li>
+                <div class="job-header">
+                    <div class="job-title">Student IT Consultant @ UIUC</div>
+                    <div class="job-date">Aug 2024 - Present</div>
+                </div>
+                <div class="job-desc">Helping people with tech stuff</div>
+            </li>
+            <li>
+                <div class="job-header">
+                    <div class="job-title">Coding Expertise for AI Training @ Outlier</div>
+                    <div class="job-date">Apr 2024 - Nov 2024</div>
+                </div>
+                <div class="job-desc">Wrote (very good) code for AI to train on</div>
+            </li>
+            <li>
+                <div class="job-header">
+                    <div class="job-title">Freelance Coder @ Fiverr</div>
+                    <div class="job-date">May 2022 - Aug 2024</div>
+                </div>
+                <div class="job-desc">Built cool websites and coded software for automation/AI integration/etc.</div>
+            </li>
+        </ul>
+    </section>
+
+    <section id="contact" class="section">
+        <h2>Contact</h2>
+        <div class="contact-info">
+            <div class="email-container">
+                <span class="email-copy" data-email="tyxiong2@illinois.edu">
+                    tyxiong2@illinois.edu
+                </span>
+                <div class="copy-feedback">Copied!</div>
+            </div>
+            <a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/TheoXiong7" target="_blank">GitHub</a>
+            <a href="static/files/resume.pdf" target="_blank">Resume</a>
+        </div>
+    </section>
+
+    <div class="quirky-header">
+        <h1>That's all.</h1>
+        <p>Sincerely, Theo.</p>
+    </div>
+    
+    <script>
+        const fontMap = {
+            'opensans': '"Open Sans", sans-serif',
+            'lato': '"Lato", sans-serif',
+            'system': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif',
+            'inter': '"Inter", sans-serif',
+            'roboto': '"Roboto", sans-serif',
+            'sourcesans': '"Source Sans Pro", sans-serif',
+            'nunito': '"Nunito Sans", sans-serif',
+            'worksans': '"Work Sans", sans-serif',
+            'poppins': '"Poppins", sans-serif',
+            'ibmplex': '"IBM Plex Sans", sans-serif'
+        };
+        
+        const dropdown = document.getElementById('fontDropdown');
+        const dropdownSelected = document.getElementById('dropdownSelected');
+        const dropdownOptions = document.getElementById('dropdownOptions');
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Load saved preferences
+        const savedFont = localStorage.getItem('selectedFont') || 'opensans';
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('selectedTheme') || (systemPrefersDark ? 'dark' : 'light');
+        
+        // Set initial font
+        html.style.setProperty('--current-font', fontMap[savedFont]);
+        html.setAttribute('data-theme', savedTheme);
+        
+        // Update dropdown display
+        const selectedOption = document.querySelector(`[data-value="${savedFont}"]`);
+        if (selectedOption) {
+            dropdownSelected.querySelector('span').textContent = selectedOption.textContent;
+            document.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+            selectedOption.classList.add('selected');
+        }
+        
+        // Dropdown toggle
+        dropdownSelected.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('open');
+        });
+        
+        // Font selection
+        dropdownOptions.addEventListener('click', function(e) {
+            if (e.target.classList.contains('dropdown-option')) {
+                const selectedFont = e.target.getAttribute('data-value');
+                
+                // Update font
+                html.style.setProperty('--current-font', fontMap[selectedFont]);
+                localStorage.setItem('selectedFont', selectedFont);
+                
+                // Update UI
+                dropdownSelected.querySelector('span').textContent = e.target.textContent;
+                document.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+                e.target.classList.add('selected');
+                
+                // Close dropdown
+                dropdown.classList.remove('open');
+            }
+        });
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            // Only auto-update if user hasn't manually set a preference
+            if (!localStorage.getItem('selectedTheme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+            }
+        });
+
+        // Theme toggle
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Add rotation animation
+            this.classList.add('rotating');
+            
+            // Change theme after a brief delay for animation
+            setTimeout(() => {
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('selectedTheme', newTheme);
+            }, 150);
+            
+            // Remove rotation class after animation
+            setTimeout(() => {
+                this.classList.remove('rotating');
+            }, 300);
+        });
+
+        // Enhanced smooth scroll for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 60; // Account for fixed controls
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Email copy functionality
+        document.querySelectorAll('.email-copy').forEach(emailElement => {
+            emailElement.addEventListener('click', async function() {
+                const container = this.closest('.email-container');
+                const feedback = container.querySelector('.copy-feedback');
+                
+                // Prevent multiple rapid clicks
+                if (this.classList.contains('copied')) return;
+                
+                try {
+                    await navigator.clipboard.writeText('tyxiong2@illinois.edu');
+                    
+                    // Add underline animation
+                    this.classList.add('copied');
+                    
+                    // Show feedback text
+                    feedback.classList.add('show');
+                    
+                    // Hide feedback and reset after 2 seconds
+                    setTimeout(() => {
+                        feedback.classList.remove('show');
+                        this.classList.remove('copied');
+                    }, 2000);
+                    
+                } catch (err) {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = 'tyxiong2@illinois.edu';
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    // Add underline animation
+                    this.classList.add('copied');
+                    
+                    // Show feedback text
+                    feedback.classList.add('show');
+                    
+                    // Hide feedback and reset after 2 seconds
+                    setTimeout(() => {
+                        feedback.classList.remove('show');
+                        this.classList.remove('copied');
+                    }, 2000);
+                }
+            });
+        });
+
+        // Coming soon functionality
+        document.querySelectorAll('.coming-soon').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const feedback = this.querySelector('.coming-soon-feedback');
+                
+                // Prevent multiple rapid clicks
+                if (this.classList.contains('clicked')) return;
+                
+                // Add underline animation
+                this.classList.add('clicked');
+                
+                // Show feedback text
+                if (feedback) {
+                    feedback.classList.add('show');
+                }
+                
+                // Hide feedback and reset after 2 seconds
+                setTimeout(() => {
+                    if (feedback) {
+                        feedback.classList.remove('show');
+                    }
+                    this.classList.remove('clicked');
+                }, 2000);
+            });
+        });
+
+    </script>
+</body>
+</html>
