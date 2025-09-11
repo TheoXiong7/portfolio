@@ -2,7 +2,7 @@
 
 A clean, responsive personal website built with vanilla HTML, CSS, and JavaScript.
 
-[lovelybuilds.com](https://lovelybuilds.com/)
+[theoxiong.com](https://theoxiong.com/)
 
 ## License
 
