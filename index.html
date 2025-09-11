@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="static/files/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="static/files/favicons/favicon-16x16.png">
     <link rel="manifest" href="static/files/favicons/site.webmanifest">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0a0f;
@@ -31,8 +31,8 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #0a0a0f 0%, #0f0f14 30%, #1a1a20 100%);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
@@ -53,6 +53,7 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            transition: opacity 0.8s ease;
         }
 
         .stars {
@@ -133,28 +134,26 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(135deg, transparent 20%, rgba(147, 112, 219, 0.15) 40%, rgba(255, 182, 193, 0.12) 50%, rgba(135, 206, 235, 0.18) 60%, transparent 80%),
-                radial-gradient(ellipse 800px 200px at 30% 40%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse 600px 150px at 70% 60%, rgba(186, 85, 211, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse 400px 100px at 50% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 50%);
+                linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%),
+                radial-gradient(ellipse 800px 200px at 30% 40%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(ellipse 600px 150px at 70% 60%, rgba(255, 255, 255, 0.015) 0%, transparent 50%);
             z-index: -1;
             animation: milkyWayFlow 45s ease-in-out infinite alternate;
+            transition: opacity 0.8s ease;
         }
 
         @keyframes milkyWayFlow {
             0% {
                 background: 
-                    linear-gradient(135deg, transparent 20%, rgba(147, 112, 219, 0.15) 40%, rgba(255, 182, 193, 0.12) 50%, rgba(135, 206, 235, 0.18) 60%, transparent 80%),
-                    radial-gradient(ellipse 800px 200px at 30% 40%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                    radial-gradient(ellipse 600px 150px at 70% 60%, rgba(186, 85, 211, 0.06) 0%, transparent 50%),
-                    radial-gradient(ellipse 400px 100px at 50% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 50%);
+                    linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%),
+                    radial-gradient(ellipse 800px 200px at 30% 40%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                    radial-gradient(ellipse 600px 150px at 70% 60%, rgba(255, 255, 255, 0.015) 0%, transparent 50%);
             }
             100% {
                 background: 
-                    linear-gradient(125deg, transparent 25%, rgba(186, 85, 211, 0.12) 45%, rgba(100, 255, 218, 0.15) 55%, rgba(147, 112, 219, 0.16) 65%, transparent 85%),
-                    radial-gradient(ellipse 700px 180px at 60% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-                    radial-gradient(ellipse 500px 120px at 40% 70%, rgba(255, 182, 193, 0.08) 0%, transparent 50%),
-                    radial-gradient(ellipse 350px 80px at 80% 40%, rgba(135, 206, 235, 0.07) 0%, transparent 50%);
+                    linear-gradient(125deg, transparent 35%, rgba(255, 255, 255, 0.025) 55%, transparent 75%),
+                    radial-gradient(ellipse 700px 180px at 60% 30%, rgba(255, 255, 255, 0.018) 0%, transparent 50%),
+                    radial-gradient(ellipse 500px 120px at 40% 70%, rgba(255, 255, 255, 0.012) 0%, transparent 50%);
             }
         }
 
@@ -165,6 +164,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            transition: opacity 0.8s ease;
         }
 
         .star-layer {
@@ -222,8 +222,8 @@
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -233,10 +233,10 @@
         }
 
         .hero .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--text-secondary);
             margin-bottom: 2rem;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         .hero .description {
@@ -510,6 +510,9 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .project-title a {
@@ -520,6 +523,20 @@
 
         .project-title a:hover {
             color: var(--accent-primary);
+        }
+        
+        .external-link-icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .project-title a:hover + .external-link-icon,
+        .project-title:hover .external-link-icon {
+            opacity: 1;
+            transform: translateX(2px) translateY(-2px);
         }
 
         .project-description {
@@ -686,19 +703,27 @@
 
         .contact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
             margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .contact-item {
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
+            background: rgba(26, 26, 35, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-height: 70px;
         }
 
         .contact-item::before {
@@ -715,12 +740,13 @@
         }
 
         .contact-item:hover::before {
-            opacity: 0.1;
+            opacity: 0.05;
         }
 
         .contact-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px var(--card-shadow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.15);
+            border-color: rgba(100, 255, 218, 0.3);
         }
 
         .contact-item a {
@@ -728,6 +754,7 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
+            flex: 1;
         }
 
         .contact-item:hover a {
@@ -742,11 +769,34 @@
         .email-copy {
             cursor: pointer;
             position: relative;
+            flex: 1;
         }
 
         .email-item {
             position: relative;
             overflow: visible;
+        }
+        
+        .contact-logo {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            filter: brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+        
+        .contact-item:hover .contact-logo {
+            filter: brightness(1) drop-shadow(0 0 8px rgba(100, 255, 218, 0.4));
+        }
+        
+        .contact-logo.email-icon {
+            background: var(--text-secondary);
+            mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>') center/contain no-repeat;
+        }
+        
+        .contact-logo.resume-icon {
+            background: var(--text-secondary);
+            mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z"/><path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"/></svg>') center/contain no-repeat;
         }
         
         .email-item::before {
@@ -883,7 +933,7 @@
     <section id="hero" class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Theo Xiong</h1>
+                <h1>Theodore Xiong</h1>
                 <p class="subtitle">Computer Engineering @ UIUC '26</p>
                 <p class="description">
                     I build innovative digital experiences that blend functionality with aesthetic appeal. 
@@ -903,15 +953,15 @@
 
     <section id="tech-stack" class="section">
         <div class="container">
-            <h2 class="section-title">Technical Expertise</h2>
+            <h2 class="section-title">Tech Stack</h2>
             <div class="tech-grid">
                 <div class="tech-category">
                     <!-- <div class="tech-icon">🌐</div> -->
                     <h3>Web Development</h3>
                     <!-- <p class="tech-category-desc">Building modern, responsive web applications with robust backend systems</p> -->
                     <div class="tech-items">
-                        <span class="tech-item featured">Flask</span>
-                        <span class="tech-item featured">React</span>
+                        <span class="tech-item">Flask</span>
+                        <span class="tech-item">React</span>
                         <span class="tech-item">Tailwind CSS</span>
                         <span class="tech-item">PostgreSQL</span>
                         <span class="tech-item">Docker</span>
@@ -926,7 +976,7 @@
                     <h3>Data Science & AI</h3>
                     <!-- <p class="tech-category-desc">Leveraging machine learning and data analysis to solve complex problems</p> -->
                     <div class="tech-items">
-                        <span class="tech-item featured">Python</span>
+                        <span class="tech-item">Python</span>
                         <span class="tech-item">PyTorch</span>
                         <span class="tech-item">Pandas</span>
                         <span class="tech-item">NumPy</span>
@@ -942,14 +992,28 @@
                     <h3>Systems Programming</h3>
                     <!-- <p class="tech-category-desc">Low-level programming and hardware design for performance-critical applications</p> -->
                     <div class="tech-items">
-                        <span class="tech-item featured">C/C++</span>
+                        <span class="tech-item">C/C++</span>
                         <span class="tech-item">SystemVerilog</span>
                         <span class="tech-item">Verilog</span>
                         <span class="tech-item">RISC-V</span>
-                        <span class="tech-item">Assembly</span>
+                        <span class="tech-item">Device Drivers</span>
                         <span class="tech-item">FPGA Design</span>
                     </div>
                 </div>
+
+                <div class="tech-category">
+                    <!-- <div class="tech-icon">⚡</div> -->
+                    <h3>Hardware/Electrical</h3>
+                    <!-- <p class="tech-category-desc">Low-level programming and hardware design for performance-critical applications</p> -->
+                    <div class="tech-items">
+                        <span class="tech-item">Circuit Analysis</span>
+                        <span class="tech-item">Analog/Digital Signals</span>
+                        <span class="tech-item">Oscilloscopes</span>
+                        <span class="tech-item">Power Supplies</span>
+                        <span class="tech-item">Multimeters</span>
+                    </div>
+                </div>
+
             </div>
             
             <!-- <div class="tech-stats">
@@ -980,6 +1044,11 @@
                 <div class="project-card">
                     <div class="project-title">
                         <a href="https://instatruth.app/" target="_blank">InstaTruth.app</a>
+                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15,3 21,3 21,9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
                     </div>
                     <div class="project-description">
                         Advanced fact-checking platform that verifies video content authenticity using custom-trained BERT NLP models 
@@ -996,6 +1065,11 @@
                 <div class="project-card">
                     <div class="project-title">
                         <a href="https://pokerbuddy.app/" target="_blank">PokerBuddy.app</a>
+                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15,3 21,3 21,9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
                     </div>
                     <div class="project-description">
                         Comprehensive web-based poker analytics platform featuring advanced statistical tracking, 
@@ -1010,6 +1084,11 @@
                 <div class="project-card">
                     <div class="project-title">
                         <a href="https://www.betgloballive.com/" target="_blank">BetGlobalLive.com</a>
+                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15,3 21,3 21,9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
                     </div>
                     <div class="project-description">
                         Revolutionary peer-to-peer betting platform eliminating traditional house edges with 
@@ -1026,6 +1105,11 @@
                 <div class="project-card">
                     <div class="project-title">
                         <a href="https://www.risc-view.com/" target="_blank">Risc-View.com</a>
+                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15,3 21,3 21,9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
                     </div>
                     <div class="project-description">
                         Essential RISC-V instruction reference tool providing instant lookup capabilities 
@@ -1048,7 +1132,7 @@
                 <div class="experience-item">
                     <div class="experience-card">
                         <div class="job-title">Student IT Consultant @ UIUC</div>
-                        <div class="job-date">Aug 2024 - Present</div>
+                        <div class="job-date">Aug 2024 - Aug 2025</div>
                         <div class="job-desc">
                             Provide comprehensive technical support and consultation services, 
                             troubleshooting complex system issues and implementing technology solutions for the university community.
@@ -1086,44 +1170,44 @@
 
     <section id="contact" class="section contact-section">
         <div class="container">
-            <h2 class="section-title">Let's Connect</h2>
+            <h2 class="section-title">Contact Info</h2>
             <div class="contact-intro">
-                <p>Ready to collaborate or just want to chat? I'm always open to new opportunities and interesting conversations.</p>
+                <p>Let's connect!</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-item email-item">
-                    <!-- <div class="contact-icon">📧</div> -->
-                    <!-- <div class="contact-label">Email</div> -->
+                    <div class="contact-logo email-icon"></div>
                     <div class="email-copy" data-email="tyxiong2@illinois.edu">
                         tyxiong2@illinois.edu
                     </div>
                     <div class="copy-feedback">Copied to clipboard!</div>
                 </div>
                 <div class="contact-item">
-                    <!-- <div class="contact-icon">💼</div> -->
-                    <!-- <div class="contact-label">Professional</div> -->
+                    <svg class="contact-logo" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
                     <a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a>
                 </div>
                 <div class="contact-item">
-                    <!-- <div class="contact-icon">💻</div> -->
-                    <!-- <div class="contact-label">Code</div> -->
-                    <a href="https://g  ithub.com/TheoXiong7" target="_blank">GitHub</a>
+                    <svg class="contact-logo" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                    </svg>
+                    <a href="https://github.com/TheoXiong7" target="_blank">GitHub</a>
                 </div>
                 <div class="contact-item">
-                    <!-- <div class="contact-icon">📄</div> -->
-                    <!-- <div class="contact-label">Experience</div> -->
+                    <div class="contact-logo resume-icon"></div>
                     <a href="static/files/resume.pdf" target="_blank">Resume</a>
                 </div>
             </div>
             <!-- <div class="contact-cta">
-                <p>Let's build something amazing together!</p>
+                <p>Let's connect!</p>
             </div> -->
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <p>The End</p>
+            <p>TX 2025</p>
         </div>
     </footer>
 
@@ -1231,10 +1315,22 @@
             });
         });
 
-        // Update active nav on scroll
+        // Update active nav on scroll and fade stars
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
             const scrollPosition = window.scrollY + 100;
+            const starField = document.getElementById('starField');
+            const starsBackground = document.querySelector('.stars-bg');
+            const milkyWay = document.querySelector('.milky-way');
+            
+            // Fade out stars after scrolling past hero section
+            const heroHeight = document.querySelector('#hero').offsetHeight;
+            const scrollPercent = Math.min(scrollPosition / (heroHeight * 0.8), 1);
+            const opacity = Math.max(1 - scrollPercent, 0);
+            
+            if (starField) starField.style.opacity = opacity;
+            if (starsBackground) starsBackground.style.opacity = opacity;
+            if (milkyWay) milkyWay.style.opacity = opacity * 0.7;
 
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
