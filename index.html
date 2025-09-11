@@ -857,14 +857,7 @@
 
         @media (max-width: 768px) {
             nav {
-                top: 1rem;
-                right: 1rem;
-                left: 1rem;
-            }
-
-            nav ul {
-                justify-content: center;
-                flex-wrap: wrap;
+                display: none;
             }
             
 
@@ -902,6 +895,22 @@
 
             .container {
                 padding: 0 1rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: 2rem 0;
+            }
+            
+            .contact-item {
+                padding: 1.25rem;
+                min-height: 60px;
+            }
+            
+            .contact-logo {
+                width: 20px;
+                height: 20px;
             }
         }
 
