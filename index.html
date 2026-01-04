@@ -3,695 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Theo Xiong - Software Engineer</title>
+    <title>Theo Xiong</title>
 
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="Theo Xiong - Software Engineer">
-    <meta name="description" content="Computer Engineering student at UIUC building production-ready data pipelines, AI pipelines, and full-stack web applications. Check out my projects: InstaTruth, PokerBuddy, BetGlobalLive, and more.">
-    <meta name="keywords" content="Theo Xiong, Software Engineer, UIUC, Computer Engineering, Full Stack Developer, AI, Machine Learning, Web Development">
+    <!-- Meta Tags -->
+    <meta name="description" content="Theo Xiong - Computer Engineering student at UIUC building production-ready software.">
     <meta name="author" content="Theo Xiong">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://theoxiong.com/">
-    <meta property="og:title" content="Theo Xiong - Software Engineer">
-    <meta property="og:description" content="Computer Engineering student at UIUC building production-ready data pipelines, AI pipelines, and full-stack web applications.">
-    <meta property="og:image" content="https://theoxiong.com/static/files/og-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:title" content="Theo Xiong">
+    <meta property="og:description" content="Computer Engineering student at UIUC building production-ready software.">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://theoxiong.com/">
-    <meta property="twitter:title" content="Theo Xiong - Software Engineer">
-    <meta property="twitter:description" content="Computer Engineering student at UIUC building production-ready data pipelines, AI pipelines, and full-stack web applications.">
-    <meta property="twitter:image" content="https://theoxiong.com/static/files/og-image.png">
-
+    <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="static/files/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="static/files/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="static/files/favicons/favicon-16x16.png">
-    <link rel="manifest" href="static/files/favicons/site.webmanifest">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts - Inter Tight & IBM Plex Mono -->
+    <!-- Google Fonts - IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'inter': ['Inter Tight', 'sans-serif'],
-                        'mono': ['IBM Plex Mono', 'monospace'],
-                    },
-                    colors: {
-                        'dark': '#0a0a0a',
-                        'dark-secondary': '#1a1a1a',
-                        'accent': '#6366f1',
-                        'accent-hover': '#4f46e5',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Inter Tight', sans-serif;
-        }
-
-        .font-mono {
             font-family: 'IBM Plex Mono', monospace;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #000;
+            background: #fff;
+            padding: 60px 40px;
+            max-width: 720px;
+            margin: 0 auto;
         }
 
-        /* Grid background effect */
-        .grid-bg {
-            background-image:
-                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+        ::selection {
+            background: #000;
+            color: #fff;
         }
 
-        /* Fade in animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 1px solid #000;
+            transition: opacity 0.2s ease;
+        }
+
+        a:hover {
+            opacity: 0.5;
+        }
+
+        .header {
+            margin-bottom: 80px;
+        }
+
+        .name {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .location {
+            opacity: 0.5;
+            font-size: 14px;
+        }
+
+        .header-contacts {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            opacity: 0.5;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-weight: 500;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.5;
+        }
+
+        .entry {
+            margin-bottom: 16px;
+        }
+
+        .entry-title {
+            font-weight: 400;
+        }
+
+        .entry-meta {
+            opacity: 0.5;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            opacity: 0.7;
+        }
+
+        .stack-item {
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            opacity: 0.5;
+            font-size: 13px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 40px 24px;
+                font-size: 14px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .header {
+                margin-bottom: 60px;
+            }
+
+            .section {
+                margin-bottom: 50px;
             }
         }
-
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        /* Float animation */
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.05); }
-        }
-
-        .parabola-glow {
-            animation: float 8s ease-in-out infinite;
-        }
-
-        /* Bounce animation */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
-
-        .scroll-indicator {
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        /* Shimmer effect */
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .shimmer-text {
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.3) 0%,
-                rgba(255, 255, 255, 0.9) 50%,
-                rgba(255, 255, 255, 0.3) 100%
-            );
-            background-size: 200% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite;
-        }
-
-        /* Slide up animation */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stat-number {
-            animation: slideUp 0.8s ease-out forwards;
-        }
-
-        /* Typing animation */
-        @keyframes typing {
-            0% { width: 0; }
-            20% { width: 100%; }
-            80% { width: 100%; }
-            100% { width: 0; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        .typing-text {
-            display: inline-block;
-            overflow: hidden;
-            border-right: 3px solid;
-            border-color: #6366f1;
-            white-space: nowrap;
-            animation: typing 6s cubic-bezier(0.4, 0, 0.2, 1) infinite, blink 0.75s step-end infinite;
-            width: 0;
-        }
-
     </style>
 </head>
-<body class="bg-dark text-white antialiased">
+<body>
 
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-lg border-b border-white/5">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-start">
-                <a href="#hero" class="text-2xl font-bold tracking-tight hover:text-accent transition-colors">
-                    Theo <span class="font-mono text-accent">Xiong</span>
-                </a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg bg-dark">
-
-            <!-- Parabola-shaped gradient glow -->
-            <div class="absolute left-1/2 top-1/3 parabola-glow pointer-events-none">
-                <div class="w-[800px] h-[400px] blur-3xl opacity-30"
-                     style="background: radial-gradient(ellipse 800px 200px at 50% 100%, #ff006e 0%, #ff6b35 30%, transparent 60%);"></div>
-            </div>
-
-            <!-- Hero content -->
-            <div class="relative z-10 container mx-auto px-6 text-center">
-                <div class="fade-in-up max-w-5xl mx-auto">
-
-                    <!-- Badge -->
-                    <div class="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8 backdrop-blur-sm">
-                        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
-                        <span class="text-sm font-mono text-gray-300">Computer Engineering @ UIUC '26</span>
-                    </div>
-
-                    <!-- Main heading -->
-                    <h1 class="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight leading-none">
-                        <span class="typing-text bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                            Hi! I'm Theo.
-                        </span>
-                    </h1>
-
-                    <!-- Subheading -->
-                    <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-                        I build production-ready data pipelines, AI pipelines, full-stack web-apps, and more. I enjoy the stock market, soccer, and fixing my car.
-                    </p>
-
-                    <!-- CTA buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <a href="#projects" class="px-8 py-4 bg-white text-black hover:bg-gray-100 rounded-lg font-semibold flex items-center space-x-2 group transition-all">
-                            <span>View Projects</span>
-                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                            </svg>
-                        </a>
-                        <a href="#contact" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg font-semibold backdrop-blur-sm transition-all">
-                            Get in Touch
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scroll indicator -->
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
-                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
-            </div>
-        </section>
-
-        <!-- Tech Stack Section -->
-        <section id="tech-stack" class="relative bg-black overflow-hidden">
-
-            <!-- Large background letter -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
-                <div class="text-[40rem] font-bold leading-none">T</div>
-            </div>
-
-            <!-- Content -->
-            <div class="relative py-32">
-                <div class="container mx-auto px-6">
-
-                    <!-- Header -->
-                    <div class="mb-32">
-                        <div class="max-w-7xl mx-auto">
-                            <span class="text-accent font-mono text-sm uppercase tracking-wider mb-6 block">Tech Stack</span>
-                            <h2 class="text-6xl md:text-8xl font-bold mb-12 leading-tight max-w-5xl">
-                                Tools & Frameworks
-                                <span class="shimmer-text block">that I use</span>
-                            </h2>
-                            <p class="text-2xl md:text-3xl text-gray-400 max-w-4xl leading-relaxed">
-                                From web dev and AI, to systems programming and hardware design. 
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Tech Grid -->
-                    <div class="max-w-7xl mx-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20">
-
-                            <div class="group">
-                                <div class="text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                                    01
-                                </div>
-                                <h3 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
-                                    Web Development
-                                </h3>
-                                <p class="text-xl text-gray-400 leading-relaxed mb-6">
-                                    Building modern, responsive web applications with robust backend systems and elegant user interfaces.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Flask</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">React</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Tailwind</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">PostgreSQL</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Docker</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Railway</span>
-                                </div>
-                                <div class="mt-6 w-12 h-1 bg-gradient-to-r from-pink-500 to-orange-400"></div>
-                            </div>
-
-                            <div class="group">
-                                <div class="text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                                    02
-                                </div>
-                                <h3 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
-                                    Data Science & AI
-                                </h3>
-                                <p class="text-xl text-gray-400 leading-relaxed mb-6">
-                                    Leveraging machine learning and data analysis to solve complex problems and extract actionable insights.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Python</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">PyTorch</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Pandas</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">NumPy</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">OpenCV</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">BERT/NLP</span>
-                                </div>
-                                <div class="mt-6 w-12 h-1 bg-gradient-to-r from-pink-500 to-orange-400"></div>
-                            </div>
-
-                            <div class="group">
-                                <div class="text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                                    03
-                                </div>
-                                <h3 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
-                                    Systems Programming
-                                </h3>
-                                <p class="text-xl text-gray-400 leading-relaxed mb-6">
-                                    Low-level programming and hardware design for performance-critical applications and embedded systems.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">C/C++</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">SystemVerilog</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">RISC-V</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Device Drivers</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">FPGA</span>
-                                </div>
-                                <div class="mt-6 w-12 h-1 bg-gradient-to-r from-pink-500 to-orange-400"></div>
-                            </div>
-
-                            <div class="group">
-                                <div class="text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                                    04
-                                </div>
-                                <h3 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
-                                    Hardware & Electrical
-                                </h3>
-                                <p class="text-xl text-gray-400 leading-relaxed mb-6">
-                                    Hands-on experience with circuit design, signal analysis, and hardware debugging tools.
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Circuit Analysis</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Analog/Digital</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Oscilloscopes</span>
-                                    <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-sm font-mono">Multimeters</span>
-                                </div>
-                                <div class="mt-6 w-12 h-1 bg-gradient-to-r from-pink-500 to-orange-400"></div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Bottom gradient -->
-            <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="relative bg-dark overflow-hidden py-32">
-
-            <!-- Gradient orbs -->
-            <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl"></div>
-
-            <div class="container mx-auto px-6 relative z-10">
-
-                <!-- Header -->
-                <div class="max-w-7xl mx-auto mb-20">
-                    <span class="text-accent font-mono text-sm uppercase tracking-wider mb-6 block">PROJECTS</span>
-                    <h2 class="text-6xl md:text-8xl font-bold mb-12 leading-tight">
-                        Stuff that
-                        <span class="block bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                            I built
-                        </span>
-                    </h2>
-                </div>
-
-                <!-- Projects Grid -->
-                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                    <!-- Project 1 -->
-                    <a href="https://instatruth.app/" target="_blank" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-dark-secondary to-dark border border-white/10 hover:border-accent/30 transition-all duration-300 hover:scale-[1.02]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative p-8">
-                            <div class="flex items-start justify-between mb-4">
-                                <h3 class="text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">InstaTruth.app</h3>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                            <p class="text-gray-400 leading-relaxed mb-6 text-sm">
-                                Advanced fact-checking platform using custom-trained BERT NLP models to combat misinformation in digital media.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">PyTorch</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">BERT</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">OpenAI</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Project 2 -->
-                    <a href="https://pokerbuddy.app/" target="_blank" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-dark-secondary to-dark border border-white/10 hover:border-accent/30 transition-all duration-300 hover:scale-[1.02]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative p-8">
-                            <div class="flex items-start justify-between mb-4">
-                                <h3 class="text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">PokerBuddy.app</h3>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                            <p class="text-gray-400 leading-relaxed mb-6 text-sm">
-                                Comprehensive poker analytics platform with advanced statistical tracking and performance insights for serious players.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">Flask</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">PostgreSQL</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Project 3 -->
-                    <a href="https://www.betgloballive.com/" target="_blank" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-dark-secondary to-dark border border-white/10 hover:border-accent/30 transition-all duration-300 hover:scale-[1.02]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative p-8">
-                            <div class="flex items-start justify-between mb-4">
-                                <h3 class="text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">BetGlobalLive.com</h3>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                            <p class="text-gray-400 leading-relaxed mb-6 text-sm">
-                                Peer-to-peer betting platform eliminating traditional house edges with zero-fee transactions and transparent wagering.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">Flask</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">PostgreSQL</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">AWS EC2</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Project 4 -->
-                    <a href="https://www.risc-view.com/" target="_blank" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-dark-secondary to-dark border border-white/10 hover:border-accent/30 transition-all duration-300 hover:scale-[1.02]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative p-8">
-                            <div class="flex items-start justify-between mb-4">
-                                <h3 class="text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">Risc-View.com</h3>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                            <p class="text-gray-400 leading-relaxed mb-6 text-sm">
-                                RISC-V instruction reference tool providing instant lookup for assembly programming, widely adopted at UIUC.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">Flask</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">React</span>
-                                <span class="px-2.5 py-1 bg-accent/10 text-accent rounded-md text-xs font-mono">Tailwind</span>
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-
-                <!-- GitHub Link -->
-                <div class="max-w-7xl mx-auto mt-8">
-                    <a href="https://github.com/TheoXiong7" target="_blank" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-dark-secondary to-dark border border-white/10 hover:border-accent/30 transition-all duration-300 hover:scale-[1.01] block">
-                        <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative p-8 flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <svg class="w-10 h-10 text-gray-400 group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                                </svg>
-                                <div>
-                                    <h3 class="text-xl md:text-2xl font-bold group-hover:text-accent transition-colors">More on GitHub</h3>
-                                    <p class="text-sm text-gray-400">View all my open source projects</p>
-                                </div>
-                            </div>
-                            <svg class="w-5 h-5 text-gray-400 group-hover:text-accent group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                            </svg>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experience Section -->
-        <section id="experience" class="relative bg-black overflow-hidden py-32">
-
-            <!-- Large background letter -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
-                <div class="text-[40rem] font-bold leading-none">E</div>
-            </div>
-
-            <div class="container mx-auto px-6 relative z-10">
-
-                <!-- Header -->
-                <div class="max-w-7xl mx-auto mb-20">
-                    <span class="text-accent font-mono text-sm uppercase tracking-wider mb-6 block">WORK</span>
-                    <h2 class="text-6xl md:text-8xl font-bold mb-12 leading-tight">
-                        Professional
-                        <span class="block bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                            Experience
-                        </span>
-                    </h2>
-                </div>
-
-                <!-- Experience Items -->
-                <div class="max-w-5xl mx-auto space-y-16">
-
-                    <!-- Experience 1 -->
-                    <div class="relative pl-8 border-l-2 border-accent/30">
-                        <div class="absolute left-0 top-0 w-4 h-4 bg-accent rounded-full -translate-x-[9px]"></div>
-                        <div class="mb-2">
-                            <span class="text-sm font-mono text-accent">Aug 2024 - Aug 2025</span>
-                        </div>
-                        <h3 class="text-3xl md:text-4xl font-bold mb-3">Student IT Consultant</h3>
-                        <div class="text-xl text-gray-400 mb-4">University of Illinois at Urbana-Champaign</div>
-                        <p class="text-lg text-gray-400 leading-relaxed">
-                            Provided comprehensive technical support and consultation services, diagnosed complex system issues and implementing technology solutions for the university community.
-                        </p>
-                    </div>
-
-                    <!-- Experience 2 -->
-                    <div class="relative pl-8 border-l-2 border-accent/30">
-                        <div class="absolute left-0 top-0 w-4 h-4 bg-accent rounded-full -translate-x-[9px]"></div>
-                        <div class="mb-2">
-                            <span class="text-sm font-mono text-accent">Apr 2024 - Nov 2024</span>
-                        </div>
-                        <h3 class="text-3xl md:text-4xl font-bold mb-3">Coding Expertise for AI Training</h3>
-                        <div class="text-xl text-gray-400 mb-4">Outlier</div>
-                        <p class="text-lg text-gray-400 leading-relaxed">
-                            Evaluated the coherence and accuracy of Python code written by generative large language models, identified areas for improvement and provided comprehensive feedback to the development team.
-                        </p>
-                    </div>
-
-                    <!-- Experience 3 -->
-                    <div class="relative pl-8 border-l-2 border-accent/30">
-                        <div class="absolute left-0 top-0 w-4 h-4 bg-accent rounded-full -translate-x-[9px]"></div>
-                        <div class="mb-2">
-                            <span class="text-sm font-mono text-accent">May 2022 - Aug 2024</span>
-                        </div>
-                        <h3 class="text-3xl md:text-4xl font-bold mb-3">Freelance Developer</h3>
-                        <div class="text-xl text-gray-400 mb-4">Fiverr</div>
-                        <p class="text-lg text-gray-400 leading-relaxed">
-                            Delivered custom web applications, automation solutions, and AI integration services for diverse clients, specializing in modern web technologies and intelligent system implementations.
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Bottom gradient -->
-            <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-40 bg-dark relative overflow-hidden">
-
-            <!-- Gradient orbs -->
-            <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl"></div>
-
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="max-w-5xl mx-auto text-center">
-
-                    <h2 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
-                        Let's build something
-                        <span class="block bg-gradient-to-r from-pink-500 via-orange-400 to-accent bg-clip-text text-transparent">
-                            extraordinary
-                        </span>
-                    </h2>
-
-                    <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto">
-                        Always open to new opportunities and collaborations. Get in touch and let's create something amazing together.
-                    </p>
-
-                    <!-- Contact Grid -->
-                    <div class="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto mb-12">
-
-                        <!-- Email -->
-                        <button id="email-card" class="group relative px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/50 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                                <span class="text-sm font-medium text-white">Email</span>
-                            </div>
-                        </button>
-
-                        <!-- LinkedIn -->
-                        <a href="https://www.linkedin.com/in/theoxiong/" target="_blank" class="group relative px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/50 rounded-full transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
-                                <span class="text-sm font-medium text-white">LinkedIn</span>
-                            </div>
-                        </a>
-
-                        <!-- GitHub -->
-                        <a href="https://github.com/TheoXiong7" target="_blank" class="group relative px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/50 rounded-full transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                                </svg>
-                                <span class="text-sm font-medium text-white">GitHub</span>
-                            </div>
-                        </a>
-
-                        <!-- Resume -->
-                        <a href="static/files/resume.pdf" target="_blank" class="group relative px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/50 rounded-full transition-all duration-300 hover:scale-105">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                <span class="text-sm font-medium text-white">Resume</span>
-                            </div>
-                        </a>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-dark/80 backdrop-blur-lg border-t border-white/5 py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-sm text-gray-400">&copy; 2025 Theo Xiong. All rights reserved.</p>
+    <div class="header">
+        <div class="name">Theo Xiong</div>
+        <div class="tagline">Computer Engineering student building production-ready software.</div>
+        <div class="location">UIUC '26 • Champaign, IL • Philadelphia, PA</div>
+        <div class="header-contacts">
+            <a href="mailto:tyxiong2@illinois.edu">Email</a>
+            <a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/TheoXiong7" target="_blank">GitHub</a>
+            <a href="static/files/resume.pdf" target="_blank">Resume</a>
         </div>
-    </footer>
+    </div>
 
-    <script>
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+    <div class="section">
+        <div class="section-title">Projects</div>
 
-        // Email copy functionality
-        document.getElementById('email-card').addEventListener('click', async function() {
-            try {
-                await navigator.clipboard.writeText('tyxiong2@illinois.edu');
-                const originalHTML = this.innerHTML;
+        <div class="entry">
+            <div class="entry-title"><a href="https://www.betgloballive.com" target="_blank">BetGlobalLive</a> — Peer-to-peer betting platform</div>
+            <div class="entry-meta">2025</div>
+        </div>
 
-                this.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span class="text-sm font-medium text-green-500">Copied!</span>
-                    </div>
-                `;
+    </div>
 
-                setTimeout(() => {
-                    this.innerHTML = originalHTML;
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy:', err);
-            }
-        });
+    <div class="section">
+        <div class="section-title">Experience</div>
 
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                // Mobile menu functionality can be added here
-                console.log('Mobile menu clicked');
-            });
-        }
+        <div class="entry">
+            <div class="entry-title">Incoming R&D Intern • Aramco Americas</div>
+            <div class="entry-meta">2026</div>
+        </div>
 
-    </script>
+        <div class="entry">
+            <div class="entry-title">Student IT Consultant • UIUC</div>
+            <div class="entry-meta">2024 - 2025</div>
+        </div>
+
+        <div class="entry">
+            <div class="entry-title">AI Code Evaluator • Outlier AI</div>
+            <div class="entry-meta">2024</div>
+        </div>
+
+        <div class="entry">
+            <div class="entry-title">Freelance Developer • Fiverr</div>
+            <div class="entry-meta">2022 - 2024</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Stack</div>
+        <div class="stack">
+            <div class="stack-item">Python</div>
+            <div class="stack-item">Flask</div>
+            <div class="stack-item">React</div>
+            <div class="stack-item">PostgreSQL</div>
+            <div class="stack-item">PyTorch</div>
+            <div class="stack-item">C/C++</div>
+            <div class="stack-item">SystemVerilog</div>
+            <div class="stack-item">RISC-V</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Theo Xiong
+    </div>
 
 </body>
 </html>
