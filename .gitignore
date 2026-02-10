@@ -20,5 +20,10 @@ Desktop.ini
 *.tmp
 *.temp
 
-# Archives
+# folders
 archive/
+dev/
+
+# Claude
+.claude/
+CLAUDE.md
