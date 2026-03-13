@@ -48,7 +48,16 @@ a:hover {
 
 .tagline {
     margin-bottom: 20px;
-    opacity: 0.7;
+    font-style: italic;
+    display: inline-block;
+    animation: squiggle 2s ease-in-out infinite;
+}
+
+.tagline span {
+    background: linear-gradient(135deg, #B87333 0%, #D4915D 25%, #8B4513 50%, #B87333 75%, #D4915D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .location {
