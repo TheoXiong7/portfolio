@@ -34,67 +34,96 @@
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-
     <div class="header">
         <div class="name">Theo Xiong</div>
-        <div class="tagline"><span></span></div>
-        <div class="location">UIUC '26 • Champaign, IL • Philadelphia, PA</div>
-        <div class="header-contacts">
-            <a href="mailto:tyxiong2@illinois.edu">Email</a>
-            <a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a>
-            <a href="https://github.com/TheoXiong7" target="_blank">GitHub</a>
-            <!-- <a href="static/files/resume.pdf" target="_blank">Resume</a> -->
-        </div>
+        <div class="tagline"><span>accent color</span></div>
+        <div class="location">Computer Engineering Student @</div>
+        <div class="location">University of Illinois at Urbana-Champaign</div>
+        <div class="location">Shenzhen, China • Philadelphia, PA • Champaign, IL </div>
     </div>
 
     <div class="section">
         <div class="section-title">Projects</div>
-        <!-- <div class="entry">
-            <div class="entry-title">more coming...</div>
-        </div> -->
         <div class="entry">
-            <div class="entry-title"><a href="https://claude-trader-project.com" target="_blank">claude trader project</a></div>
-            <div class="entry-meta">2026</div>
+            <div class="entry-title"><a href="https://claude-trader-project.com" target="_blank">claude-trader</a></div>
         </div>
         <div class="entry">
-            <div class="entry-title"><a href="https://swejoblists.com" target="_blank">swe jobs</a></div>
-            <div class="entry-meta">2025</div>
+            <div class="entry-title"><a href="https://swejoblists.com" target="_blank">SWE jobs aggregator</a></div>
         </div>
         <div class="entry">
-            <div class="entry-title"><a href="https://www.betgloballive.com" target="_blank">p2p betting platform (for friends & family)</a></div>
-            <div class="entry-meta">2025</div>
+                <div class="entry-title"><a href="https://www.betgloballive.com" target="_blank">P2P betting platform (for friends & family)</a></div>
         </div>
 
-
+        <div class="entry">
+            <div class="entry-title"><a href="#" id="archives-toggle" class="archives-toggle" aria-expanded="false">Archives<span class="triangle"></span></a></div>
+        </div>
+        <div id="archives" hidden>
+            <div class="entry">
+                <div class="entry-title"><a href="https://www.theoxiong.com">item</a></div>
+                <div class="entry-title"><a href="https://www.theoxiong.com">item</a></div>
+                <div class="entry-title"><a href="https://www.theoxiong.com">item</a></div>
+            </div>
+        </div>
     </div>
 
     <div class="section">
         <div class="section-title">Experience</div>
-
         <div class="entry">
             <div class="entry-title">R&D Intern • Aramco Americas</div>
             <div class="entry-meta">2026</div>
         </div>
-
         <div class="entry">
             <div class="entry-title">IT Consultant • UIUC</div>
             <div class="entry-meta">2024 - 2025</div>
         </div>
-
         <div class="entry">
             <div class="entry-title">AI Code Evaluator • Outlier AI</div>
             <div class="entry-meta">2024</div>
         </div>
-
         <div class="entry">
             <div class="entry-title">Freelance Developer • Fiverr</div>
             <div class="entry-meta">2022 - 2024</div>
         </div>
     </div>
 
-    <div class="footer">
-        © 2026 Theo Xiong
+    <div class="section">
+        <div class="section-title">Links</div>
+        <div class="entry">
+            <div class="entry-title"><a href="mailto:tyxiong2@illinois.edu">Email (href)</a></div>
+        </div>
+        <div class="entry">
+            <div class="entry-title"><a href="#" id="copy-email" data-email="tyxiong2@illinois.edu">Email (copy)</a></div>
+        </div>
+        <div class="entry">
+            <div class="entry-title"><a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a></div>
+        </div>
+        <div class="entry">
+            <div class="entry-title"><a href="https://github.com/TheoXiong7" target="_blank">GitHub</a></div>
+        </div>
     </div>
 
+    <div class="footer">
+        end
+    </div>
+
+    <script>
+        document.getElementById('copy-email').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = this.dataset.email;
+            const original = this.textContent;
+            navigator.clipboard.writeText(email).then(() => {
+                this.textContent = 'Copied!';
+                setTimeout(() => { this.textContent = original; }, 1500);
+            });
+        });
+
+        document.getElementById('archives-toggle').addEventListener('click', function(e) {
+            e.preventDefault();
+            const archives = document.getElementById('archives');
+            const expanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', String(!expanded));
+            archives.hidden = expanded;
+        });
+    </script>
 </body>
 </html>

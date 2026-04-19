@@ -17,7 +17,7 @@ body {
     background: #fff;
     padding: 60px 40px;
     max-width: 720px;
-    margin: 0 auto;
+    margin: 0;
 }
 
 ::selection {
@@ -54,6 +54,8 @@ a:hover {
 }
 
 .tagline span {
+    display: inline-block;
+    padding-right: 0.15em;
     background: linear-gradient(135deg, #B87333 0%, #D4915D 25%, #8B4513 50%, #B87333 75%, #D4915D 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -79,7 +81,6 @@ a:hover {
     border-top: 1px solid rgba(0,0,0,0.1);
     opacity: 0.5;
     font-size: 13px;
-    text-align: center;
 }
 
 .section {
@@ -96,7 +97,7 @@ a:hover {
 }
 
 .entry {
-    margin-bottom: 16px;
+    margin-bottom: 4px;
 }
 
 .entry-title {
@@ -107,6 +108,26 @@ a:hover {
     opacity: 0.5;
     font-size: 14px;
     margin-top: 2px;
+}
+
+.archives-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.archives-toggle .triangle {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid #000;
+    transition: transform 0.2s ease;
+}
+
+.archives-toggle[aria-expanded="true"] .triangle {
+    transform: rotate(90deg);
 }
 
 .stack {
