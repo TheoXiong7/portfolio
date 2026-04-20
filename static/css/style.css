@@ -15,9 +15,12 @@ body {
     line-height: 1.25;
     color: #000;
     background: #fff;
+    margin: 0;
+}
+
+.page {
     padding: 60px 40px;
     max-width: 720px;
-    margin: 0;
 }
 
 ::selection {
@@ -147,10 +150,135 @@ a:hover {
     flex-wrap: wrap;
 }
 
+.project-link.active {
+    opacity: 0.5;
+}
+
+.project-panel {
+    position: fixed;
+    top: 60px;
+    bottom: 60px;
+    left: 820px;
+    right: 40px;
+    max-width: 440px;
+    padding: 40px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 10;
+}
+
+.project-panel.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.panel-close {
+    font-family: inherit;
+    font-size: 14px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 24px;
+    cursor: pointer;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.panel-close:hover {
+    opacity: 1;
+}
+
+.panel-close-arrow {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.panel-content .panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.panel-content .panel-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.panel-content .panel-visit {
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.panel-content .panel-meta {
+    opacity: 0.5;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.panel-content p {
+    margin-bottom: 16px;
+}
+
+.panel-figure {
+    margin: 24px 0;
+}
+
+.panel-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.panel-figure figcaption {
+    margin-top: 8px;
+    font-size: 13px;
+    opacity: 0.5;
+    line-height: 1.4;
+}
+
+@media (max-width: 1260px) {
+    .project-panel {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: none;
+        padding: 60px 40px;
+        border: none;
+        transform: translateX(12px);
+    }
+
+    .project-panel.open {
+        transform: translateX(0);
+    }
+
+    body.panel-open {
+        overflow: hidden;
+    }
+}
+
 @media (max-width: 640px) {
     body {
-        padding: 40px 24px;
         font-size: 14px;
+    }
+
+    .page {
+        padding: 40px 24px;
     }
 
     .header {
@@ -159,5 +287,9 @@ a:hover {
 
     .section {
         margin-bottom: 50px;
+    }
+
+    .project-panel {
+        padding: 40px 24px;
     }
 }

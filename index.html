@@ -34,75 +34,140 @@
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div class="header">
-        <div class="name">Theo Xiong</div>
-        <div class="tagline"><span>accent color</span></div>
-        <div class="location">Computer Engineering Student @</div>
-        <div class="location">University of Illinois at Urbana-Champaign</div>
-        <div class="location">Shenzhen, China • Philadelphia, PA • Champaign, IL </div>
-    </div>
+    <div class="page">
+        <div class="header">
+            <div class="name">Theo Xiong</div>
+            <div class="tagline"><span>accent color</span></div>
+            <div class="location">Computer Engineering Student @</div>
+            <div class="location">University of Illinois at Urbana-Champaign</div>
+            <div class="location">Shenzhen, China • Philadelphia, PA • Champaign, IL </div>
+        </div>
 
-    <div class="section">
-        <div class="section-title">Projects</div>
-        <div class="entry">
-            <div class="entry-title"><a href="https://claude-trader-project.com" target="_blank">claude trader</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="https://useless-donut.xyz" target="_blank">useless donut</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="https://swejoblists.com" target="_blank">swe jobs aggregator</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="#" id="archives-toggle" class="archives-toggle" aria-expanded="false">archives<span class="triangle"></span></a></div>
-        </div>
-        <div id="archives" hidden>
+        <div class="section">
+            <div class="section-title">Projects</div>
             <div class="entry">
-                <div class="entry-title"><a href="https://www.betgloballive.com" target="_blank">p2p betting platform (for friends & family)</a></div>
-                <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
-                <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
+                <div class="entry-title"><a href="#" class="project-link" data-project="claude-trader" aria-haspopup="dialog">claude trader</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-haspopup="dialog">useless donut</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-haspopup="dialog">swe jobs aggregator</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="#" id="archives-toggle" class="archives-toggle" aria-expanded="false">archives<span class="triangle"></span></a></div>
+            </div>
+            <div id="archives" hidden>
+                <div class="entry">
+                    <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-haspopup="dialog">p2p betting platform (for friends & family)</a></div>
+                    <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
+                    <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
+                </div>
             </div>
         </div>
+
+        <div class="section">
+            <div class="section-title">Experience</div>
+            <div class="entry">
+                <div class="entry-title">R&D Intern • Aramco Americas</div>
+                <div class="entry-meta">2026</div>
+            </div>
+            <div class="entry">
+                <div class="entry-title">IT Consultant • UIUC</div>
+                <div class="entry-meta">2024 - 2025</div>
+            </div>
+            <div class="entry">
+                <div class="entry-title">AI Code Evaluator • Outlier AI</div>
+                <div class="entry-meta">2024</div>
+            </div>
+            <div class="entry">
+                <div class="entry-title">Freelance Developer • Fiverr</div>
+                <div class="entry-meta">2022 - 2024</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Links</div>
+            <div class="entry">
+                <div class="entry-title"><a href="mailto:tyxiong2@illinois.edu">Email (redirect)</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="#" id="copy-email" data-email="tyxiong2@illinois.edu">Email (copy)</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a></div>
+            </div>
+            <div class="entry">
+                <div class="entry-title"><a href="https://github.com/TheoXiong7" target="_blank">GitHub</a></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            end
+        </div>
     </div>
 
-    <div class="section">
-        <div class="section-title">Experience</div>
-        <div class="entry">
-            <div class="entry-title">R&D Intern • Aramco Americas</div>
-            <div class="entry-meta">2026</div>
-        </div>
-        <div class="entry">
-            <div class="entry-title">IT Consultant • UIUC</div>
-            <div class="entry-meta">2024 - 2025</div>
-        </div>
-        <div class="entry">
-            <div class="entry-title">AI Code Evaluator • Outlier AI</div>
-            <div class="entry-meta">2024</div>
-        </div>
-        <div class="entry">
-            <div class="entry-title">Freelance Developer • Fiverr</div>
-            <div class="entry-meta">2022 - 2024</div>
-        </div>
-    </div>
+    <aside class="project-panel" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="panel-title">
+        <button type="button" class="panel-close" aria-label="Close details">
+            <span class="panel-close-arrow" aria-hidden="true">←</span>
+            <span class="panel-close-label">back</span>
+        </button>
+        <div class="panel-content"></div>
+    </aside>
 
-    <div class="section">
-        <div class="section-title">Links</div>
-        <div class="entry">
-            <div class="entry-title"><a href="mailto:tyxiong2@illinois.edu">Email (href)</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="#" id="copy-email" data-email="tyxiong2@illinois.edu">Email (copy)</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="https://www.linkedin.com/in/theoxiong/" target="_blank">LinkedIn</a></div>
-        </div>
-        <div class="entry">
-            <div class="entry-title"><a href="https://github.com/TheoXiong7" target="_blank">GitHub</a></div>
-        </div>
-    </div>
-
-    <div class="footer">
-        end
+    <div class="project-data" hidden aria-hidden="true">
+        <template data-project="claude-trader">
+            <div class="panel-header">
+                <h2 class="panel-title" id="panel-title">claude trader</h2>
+                <a class="panel-visit" href="https://claude-trader-project.com" target="_blank" rel="noopener">visit site →</a>
+            </div>
+            <div class="panel-meta">2026</div>
+            <p>A swing trading multi-agent pipeline with robust custom agent orchestration and risk management.</p>
+            <figure class="panel-figure">
+                <img src="static/files/projects/claude-trader.png" alt="Claude Trader dashboard showing net liquidation value and account metrics" loading="lazy">
+                <figcaption>Public dashboard tracking performance of the portfolio on Alpaca.</figcaption>
+            </figure>
+            <figure class="panel-figure">
+                <img src="static/files/projects/claude-trader-holdings.png" alt="Claude Trader holdings table with individual positions" loading="lazy">
+                <figcaption>Holdings view with per-symbol quantity, average cost, day change, and unrealized return.</figcaption>
+            </figure>
+        </template>
+        <template data-project="useless-donut">
+            <div class="panel-header">
+                <h2 class="panel-title">useless donut</h2>
+                <a class="panel-visit" href="https://useless-donut.xyz" target="_blank" rel="noopener">visit site →</a>
+            </div>
+            <div class="panel-meta">2026</div>
+            <p>A donut.c fork that reacts to any audio file uploaded -- bass, mid, and high bands</p>
+            <figure class="panel-figure">
+                <img src="static/files/projects/useless-donut.png" alt="ASCII torus rendered on a dark background with color and spin controls below" loading="lazy">
+                <figcaption>Dark-mode ASCII torus with color palette, spin speed, and audio-reactive controls.</figcaption>
+            </figure>
+        </template>
+        <template data-project="swe-jobs">
+            <div class="panel-header">
+                <h2 class="panel-title">swe jobs aggregator</h2>
+                <a class="panel-visit" href="https://swejoblists.com" target="_blank" rel="noopener">visit site →</a>
+            </div>
+            <div class="panel-meta">2025</div>
+            <p>Pulls internship and new-grad SWE postings from multiple GitHub job boards into one sortable, filterable feed.</p>
+            <figure class="panel-figure">
+                <img src="static/files/projects/swe-jobs.png" alt="SWE Job Lists homepage showing filter bar and recent postings" loading="lazy">
+                <figcaption>Main feed with sort/filter controls and the latest postings surfaced at the top.</figcaption>
+            </figure>
+        </template>
+        <template data-project="betgloballive">
+            <div class="panel-header">
+                <h2 class="panel-title">p2p betting platform</h2>
+                <a class="panel-visit" href="https://www.betgloballive.com" target="_blank" rel="noopener">visit site →</a>
+            </div>
+            <div class="panel-meta">archived</div>
+            <p>A peer-to-peer betting marketplace where users write their own wagers, set their own odds, and match directly with others.</p>
+            <figure class="panel-figure">
+                <img src="static/files/projects/betglobal.png" alt="BetGlobal landing page with tagline and live bet cards" loading="lazy">
+                <figcaption>Landing page.</figcaption>
+            </figure>
+        </template>
     </div>
 
     <script>
@@ -123,6 +188,52 @@
             this.setAttribute('aria-expanded', String(!expanded));
             archives.hidden = expanded;
         });
+
+        (function setupProjectPanel() {
+            const panel = document.querySelector('.project-panel');
+            const panelContent = panel.querySelector('.panel-content');
+            const closeBtn = panel.querySelector('.panel-close');
+            let activeLink = null;
+
+            function openPanel(link) {
+                const id = link.dataset.project;
+                const template = document.querySelector('.project-data template[data-project="' + id + '"]');
+                if (!template) return;
+                panelContent.replaceChildren(template.content.cloneNode(true));
+                panel.classList.add('open');
+                panel.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('panel-open');
+                activeLink = link;
+                document.querySelectorAll('.project-link.active').forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+            }
+
+            function closePanel() {
+                panel.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('panel-open');
+                if (activeLink) {
+                    activeLink.classList.remove('active');
+                    activeLink.focus();
+                    activeLink = null;
+                }
+            }
+
+            document.querySelectorAll('.project-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openPanel(this);
+                });
+            });
+
+            closeBtn.addEventListener('click', closePanel);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && panel.classList.contains('open')) {
+                    closePanel();
+                }
+            });
+        })();
     </script>
 </body>
 </html>

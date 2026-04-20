@@ -1,0 +1,43 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: Theo Xiong
+    - generic [ref=e6]: accent color
+    - generic [ref=e7]: Computer Engineering Student @
+    - generic [ref=e8]: University of Illinois at Urbana-Champaign
+    - generic [ref=e9]: Shenzhen, China • Philadelphia, PA • Champaign, IL
+  - generic [ref=e10]:
+    - generic [ref=e11]: Projects
+    - link "claude trader" [ref=e14] [cursor=pointer]:
+      - /url: "#"
+    - link "useless donut" [ref=e17] [cursor=pointer]:
+      - /url: "#"
+    - link "swe jobs aggregator" [ref=e20] [cursor=pointer]:
+      - /url: "#"
+    - link "archives" [ref=e23] [cursor=pointer]:
+      - /url: "#"
+      - text: archives
+  - generic [ref=e25]:
+    - generic [ref=e26]: Experience
+    - generic [ref=e27]:
+      - generic [ref=e28]: R&D Intern • Aramco Americas
+      - generic [ref=e29]: "2026"
+    - generic [ref=e30]:
+      - generic [ref=e31]: IT Consultant • UIUC
+      - generic [ref=e32]: 2024 - 2025
+    - generic [ref=e33]:
+      - generic [ref=e34]: AI Code Evaluator • Outlier AI
+      - generic [ref=e35]: "2024"
+    - generic [ref=e36]:
+      - generic [ref=e37]: Freelance Developer • Fiverr
+      - generic [ref=e38]: 2022 - 2024
+  - generic [ref=e39]:
+    - generic [ref=e40]: Links
+    - link "Email (href)" [ref=e43] [cursor=pointer]:
+      - /url: mailto:tyxiong2@illinois.edu
+    - link "Email (copy)" [ref=e46] [cursor=pointer]:
+      - /url: "#"
+    - link "LinkedIn" [ref=e49] [cursor=pointer]:
+      - /url: https://www.linkedin.com/in/theoxiong/
+    - link "GitHub" [ref=e52] [cursor=pointer]:
+      - /url: https://github.com/TheoXiong7
+  - generic [ref=e53]: end
