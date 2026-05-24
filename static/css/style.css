@@ -3,6 +3,22 @@
     src: url(../fonts/ABCDiatypeSemi-Mono-Regular.otf);
 }
 
+:root {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --rule: rgba(10, 10, 10, 0.1);
+    --selection-bg: #0a0a0a;
+    --selection-fg: #ffffff;
+}
+
+[data-theme="dark"] {
+    --bg: #0e0e0e;
+    --fg: #ededeb;
+    --rule: rgba(237, 237, 235, 0.12);
+    --selection-bg: #ededeb;
+    --selection-fg: #0e0e0e;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -15,9 +31,10 @@ body {
     font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.2px;
-    color: #000;
-    background: #fff;
+    color: var(--fg);
+    background: var(--bg);
     margin: 0;
+    transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 .page {
@@ -26,12 +43,12 @@ body {
 }
 
 ::selection {
-    background: #000;
-    color: #fff;
+    background: var(--selection-bg);
+    color: var(--selection-fg);
 }
 
 a {
-    color: #000;
+    color: var(--fg);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
@@ -83,7 +100,7 @@ a:hover {
 .footer {
     margin-top: 100px;
     padding-top: 40px;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    border-top: 1px solid var(--rule);
     opacity: 0.5;
     font-size: 13px;
 }
@@ -127,7 +144,7 @@ a:hover {
     height: 0;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    border-left: 7px solid #000;
+    border-left: 7px solid var(--fg);
     transition: transform 0.2s ease;
 }
 
@@ -164,13 +181,13 @@ a:hover {
     right: 40px;
     max-width: 440px;
     padding: 40px;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
+    background: var(--bg);
+    border: 1px solid var(--rule);
     overflow-y: auto;
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease, background-color 0.35s ease, border-color 0.35s ease;
     z-index: 10;
 }
 
@@ -188,7 +205,7 @@ a:hover {
     padding: 0;
     margin-bottom: 24px;
     cursor: pointer;
-    color: #000;
+    color: var(--fg);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -243,7 +260,7 @@ a:hover {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid var(--rule);
 }
 
 .panel-figure figcaption {
@@ -293,5 +310,69 @@ a:hover {
 
     .project-panel {
         padding: 40px 24px;
+    }
+
+    .theme-toggle {
+        top: 22px;
+        right: 20px;
+    }
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 28px;
+    right: 28px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--fg);
+    opacity: 0.55;
+    transition: opacity 0.2s ease, transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: 100;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    opacity: 1;
+    outline: none;
+}
+
+.theme-toggle:focus-visible .theme-toggle-orb {
+    box-shadow: 0 0 0 4px var(--rule);
+}
+
+.theme-toggle-orb {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    overflow: hidden;
+    transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1), box-shadow 0.2s ease;
+}
+
+.theme-toggle-orb::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+
+[data-theme="dark"] .theme-toggle-orb {
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body,
+    .theme-toggle-orb,
+    .project-panel {
+        transition: none !important;
     }
 }

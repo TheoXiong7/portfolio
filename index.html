@@ -37,8 +37,26 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="static/css/style.css">
+
+    <!-- Theme (set before paint to prevent flash) -->
+    <script>
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = stored || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 <body>
+    <button type="button" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <span class="theme-toggle-orb" aria-hidden="true"></span>
+    </button>
+
     <div class="page">
         <div class="header">
             <div class="name">Theo Xiong</div>
@@ -54,7 +72,7 @@
                 <div class="entry-title"><a href="#" class="project-link" data-project="claude-trader" aria-haspopup="dialog">claude trader</a></div>
             </div>
             <div class="entry">
-                <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-haspopup="dialog">useless donut</a></div>
+                <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-haspopup="dialog">p2p betting platform (for friends & family)</a></div>
             </div>
             <div class="entry">
                 <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-haspopup="dialog">swe jobs aggregator</a></div>
@@ -64,7 +82,7 @@
             </div>
             <div id="archives" hidden>
                 <div class="entry">
-                    <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-haspopup="dialog">p2p betting platform (for friends & family)</a></div>
+                    <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-haspopup="dialog">useless donut</a></div>
                     <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
                     <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div>
                 </div>
@@ -176,6 +194,18 @@
     </div>
 
     <script>
+        (function setupThemeToggle() {
+            const btn = document.querySelector('.theme-toggle');
+            if (!btn) return;
+            btn.addEventListener('click', function() {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                btn.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        })();
+
         document.getElementById('copy-email').addEventListener('click', function(e) {
             e.preventDefault();
             const email = this.dataset.email;
