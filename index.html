@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Variant A: inline expansion. Desktop project details open in place beneath the link; screenshots run as a filmstrip off the right edge. Mobile (<=640px) keeps the overlay. -->
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -38,6 +39,110 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="static/css/style.css">
 
+    <!-- Variant styles -->
+    <style>
+        /* -- Variant A: inline expansion ------------------------------------ */
+        .archives { grid-template-columns: minmax(0, 1fr); }
+        .archives > * { overflow-x: visible; overflow-y: clip; }
+
+        .project-detail {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.2s ease;
+        }
+
+        .project-detail-inner {
+            min-height: 0;
+            overflow-x: visible;
+            overflow-y: clip;
+            transform: translateY(-6px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .project-detail.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.3s ease 0.08s;
+        }
+
+        .project-detail.open .project-detail-inner { transform: translateY(0); }
+
+        .detail-body { padding: 12px 0 28px; }
+
+        .detail-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            font-size: 14px;
+        }
+
+        .detail-year { opacity: 0.5; }
+
+        .detail-body p {
+            max-width: 560px;
+            font-weight: 400;
+            line-height: 1.35;
+            margin: 10px 0 0;
+        }
+
+        /* filmstrip: starts at the column's left edge, runs to the viewport's right edge */
+        .detail-strip {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            width: calc(var(--vw, 100vw) - 40px);
+            margin-top: 22px;
+            padding: 8px 40px 20px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            scroll-snap-type: x proximity;
+        }
+
+        .detail-strip::-webkit-scrollbar { display: none; }
+        .detail-strip.fits { overflow: visible; }
+
+        .detail-strip .panel-figure,
+        .detail-strip .panel-paper {
+            flex: 0 0 auto;
+            width: min-content;
+            margin: 0;
+            scroll-snap-align: start;
+        }
+
+        .detail-strip .panel-paper { margin: 4px 12px 0 6px; }
+
+        .detail-strip .panel-figure img,
+        .detail-strip .panel-paper img {
+            height: clamp(200px, 26vw, 300px);
+            width: auto;
+        }
+
+        /* the stacked sheets sit behind the cover only, not behind its label */
+        .detail-strip .panel-paper::before,
+        .detail-strip .panel-paper::after {
+            bottom: auto;
+            aspect-ratio: var(--paper-ratio, 900 / 1165);
+        }
+
+        /* focus: the open project stays solid, its siblings recede */
+        .section.detail-open .project-link:not(.active) { opacity: 0.45; }
+        .project-link.active { opacity: 1; }
+        .project-link.active:hover { opacity: 0.5; }
+
+        @media (max-width: 640px) {
+            .project-detail { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .project-detail,
+            .project-detail-inner { transition: none !important; }
+        }
+    </style>
+
     <!-- Theme (set before paint to prevent flash) -->
     <script>
         (function() {
@@ -69,19 +174,19 @@
         <div class="section">
             <div class="section-title">Projects</div>
             <div class="entry">
-                <div class="entry-title"><a href="#" class="project-link" data-project="claude-trader" aria-haspopup="dialog">claude trader</a></div>
+                <div class="entry-title"><a href="#" class="project-link" data-project="claude-trader" aria-expanded="false">claude trader</a></div>
             </div>
             <div class="entry">
-                <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-haspopup="dialog">swe jobs aggregator</a></div>
+                <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-expanded="false">swe jobs aggregator</a></div>
             </div>
             <div class="entry">
                 <div class="entry-title"><a href="#" id="archives-toggle" class="archives-toggle" aria-expanded="false">archives<span class="triangle"></span></a></div>
             </div>
             <div id="archives" class="archives">
                 <div class="entry">
-                    <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-haspopup="dialog">useless donut</a></div>
-                    <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-haspopup="dialog">betglobal</a></div>
-                    <div class="entry-title"><a href="#" class="project-link" data-project="uiucinema" aria-haspopup="dialog">uiucinema</a></div>
+                    <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-expanded="false">useless donut</a></div>
+                    <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-expanded="false">betglobal</a></div>
+                    <div class="entry-title"><a href="#" class="project-link" data-project="uiucinema" aria-expanded="false">uiucinema</a></div>
                     <!-- <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div> -->
                     <!-- <div class="entry-title"><a href="https://www.theoxiong.com">placeholder item</a></div> -->
                 </div>
@@ -153,11 +258,11 @@
             <div class="panel-meta">2026</div>
             <p>A swing trading multi-agent pipeline with robust custom agent orchestration and risk management.</p>
             <figure class="panel-figure">
-                <img src="static/files/projects/claude-trader.png" alt="Claude Trader dashboard showing net liquidation value and account metrics" loading="lazy">
+                <img src="static/files/projects/claude-trader.png" width="1440" height="900" alt="Claude Trader dashboard showing net liquidation value and account metrics" loading="lazy">
                 <figcaption>Public dashboard tracking performance of the portfolio on Alpaca.</figcaption>
             </figure>
             <figure class="panel-figure">
-                <img src="static/files/projects/claude-trader-holdings.png" alt="Claude Trader holdings table with individual positions" loading="lazy">
+                <img src="static/files/projects/claude-trader-holdings.png" width="1440" height="900" alt="Claude Trader holdings table with individual positions" loading="lazy">
                 <figcaption>Holdings view with per-symbol quantity, average cost, day change, and unrealized return.</figcaption>
             </figure>
         </template>
@@ -169,7 +274,7 @@
             <div class="panel-meta">2026</div>
             <p>donut.c that reacts to any audio file uploaded -- bass, mid, and high bands</p>
             <figure class="panel-figure">
-                <img src="static/files/projects/useless-donut.png" alt="ASCII torus rendered on a dark background with color and spin controls below" loading="lazy">
+                <img src="static/files/projects/useless-donut.png" width="1440" height="900" alt="ASCII torus rendered on a dark background with color and spin controls below" loading="lazy">
                 <figcaption>Dark-mode ASCII torus with color palette, spin speed, and audio-reactive controls.</figcaption>
             </figure>
         </template>
@@ -181,7 +286,7 @@
             <div class="panel-meta">2025</div>
             <p>Pulls internship and new-grad SWE postings from multiple GitHub job boards into one sortable, filterable feed.</p>
             <figure class="panel-figure">
-                <img src="static/files/projects/swe-jobs.png" alt="SWE Job Lists homepage showing filter bar and recent postings" loading="lazy">
+                <img src="static/files/projects/swe-jobs.png" width="3014" height="1644" alt="SWE Job Lists homepage showing filter bar and recent postings" loading="lazy">
                 <figcaption>Main feed with sort/filter controls and the latest postings surfaced at the top.</figcaption>
             </figure>
         </template>
@@ -193,7 +298,7 @@
             <div class="panel-meta">2025</div>
             <p>A peer-to-peer betting marketplace where users write their own wagers, set their own odds, and match directly with others. (used by friends & family)</p>
             <figure class="panel-figure">
-                <img src="static/files/projects/betglobal.png" alt="BetGlobal landing page with tagline and live bet cards" loading="lazy">
+                <img src="static/files/projects/betglobal.png" width="1440" height="900" alt="BetGlobal landing page with tagline and live bet cards" loading="lazy">
                 <figcaption>Landing page.</figcaption>
             </figure>
         </template>
@@ -205,7 +310,7 @@
             <div class="panel-meta">2025</div>
             <p>A plot-based movie search engine. Hybrid retrieval — BM25 re-ranked by Sentence Transformers. Over 10,000 enriched IMDb plot summaries. Built for CS410 at UIUC.</p>
             <a class="panel-paper" href="static/files/projects/CS410_Final_Project_Report.pdf" target="_blank" rel="noopener" aria-label="Open the UIUCinema project report (PDF)">
-                <img src="static/files/projects/uiucinema-cover.png" alt="First page of the UIUCinema project report" loading="lazy">
+                <img src="static/files/projects/uiucinema-cover.png" width="900" height="1165" alt="First page of the UIUCinema project report" loading="lazy">
                 <span class="panel-paper-label">project report · pdf</span>
             </a>
         </template>
@@ -242,49 +347,178 @@
             archives.classList.toggle('open', !expanded);
         });
 
-        (function setupProjectPanel() {
+        (function setupProjects() {
             const panel = document.querySelector('.project-panel');
             const panelContent = panel.querySelector('.panel-content');
             const closeBtn = panel.querySelector('.panel-close');
-            let activeLink = null;
+            const links = Array.from(document.querySelectorAll('.project-link'));
+            const compact = window.matchMedia('(max-width: 640px)');
+            const root = document.documentElement;
+            let panelLink = null;
+            let current = null; // { link, el }
 
+            function getTemplate(id) {
+                return document.querySelector('.project-data template[data-project="' + id + '"]');
+            }
+
+            /* ---- mobile fallback: the existing full-bleed overlay panel ---- */
             function openPanel(link) {
-                const id = link.dataset.project;
-                const template = document.querySelector('.project-data template[data-project="' + id + '"]');
+                const template = getTemplate(link.dataset.project);
                 if (!template) return;
                 panelContent.replaceChildren(template.content.cloneNode(true));
                 panel.classList.add('open');
                 panel.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('panel-open');
-                activeLink = link;
-                document.querySelectorAll('.project-link.active').forEach(el => el.classList.remove('active'));
-                link.classList.add('active');
+                panelLink = link;
             }
 
             function closePanel() {
+                if (!panel.classList.contains('open')) return;
                 panel.classList.remove('open');
                 panel.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('panel-open');
-                if (activeLink) {
-                    activeLink.classList.remove('active');
-                    activeLink.focus();
-                    activeLink = null;
+                if (panelLink) {
+                    panelLink.focus();
+                    panelLink = null;
                 }
             }
 
-            document.querySelectorAll('.project-link').forEach(link => {
+            // lets the stacked-paper sheets match the cover's aspect ratio (see --paper-ratio in CSS)
+            function sizePaper(node) {
+                if (!node.classList.contains('panel-paper')) return;
+                const image = node.querySelector('img');
+                if (image && image.getAttribute('width') && image.getAttribute('height')) {
+                    node.style.setProperty('--paper-ratio', image.getAttribute('width') + ' / ' + image.getAttribute('height'));
+                }
+            }
+
+            /* ---- desktop: expand in place ---- */
+            function setVw() {
+                root.style.setProperty('--vw', root.clientWidth + 'px');
+            }
+
+            function fitStrip(strip) {
+                strip.classList.toggle('fits', strip.scrollWidth <= strip.clientWidth + 1);
+            }
+
+            function buildDetail(id) {
+                const template = getTemplate(id);
+                if (!template) return null;
+                const frag = template.content.cloneNode(true);
+
+                const wrap = document.createElement('div');
+                wrap.className = 'project-detail';
+                const inner = document.createElement('div');
+                inner.className = 'project-detail-inner';
+                const body = document.createElement('div');
+                body.className = 'detail-body';
+
+                const meta = document.createElement('div');
+                meta.className = 'detail-meta';
+                const year = frag.querySelector('.panel-meta');
+                const visit = frag.querySelector('.panel-visit');
+                if (year) {
+                    const y = document.createElement('span');
+                    y.className = 'detail-year';
+                    y.textContent = year.textContent.trim();
+                    meta.appendChild(y);
+                }
+                if (visit) meta.appendChild(visit);
+                body.appendChild(meta);
+
+                Array.from(frag.children)
+                    .filter(node => node.tagName === 'P')
+                    .forEach(p => body.appendChild(p));
+
+                const figures = Array.from(frag.querySelectorAll('.panel-figure, .panel-paper'));
+                if (figures.length) {
+                    const strip = document.createElement('div');
+                    strip.className = 'detail-strip';
+                    figures.forEach(f => { sizePaper(f); strip.appendChild(f); });
+                    body.appendChild(strip);
+                }
+
+                inner.appendChild(body);
+                wrap.appendChild(inner);
+                return wrap;
+            }
+
+            function openInline(link) {
+                if (current && current.link === link) {
+                    closeInline();
+                    return;
+                }
+                if (current) closeInline();
+
+                const el = buildDetail(link.dataset.project);
+                if (!el) return;
+                link.closest('.entry-title').after(el);
+                el.offsetHeight; // flush layout so the expand transition runs
+                el.classList.add('open');
+
+                const strip = el.querySelector('.detail-strip');
+                if (strip) {
+                    fitStrip(strip);
+                    strip.querySelectorAll('img').forEach(img => {
+                        img.addEventListener('load', () => fitStrip(strip));
+                    });
+                }
+
+                link.classList.add('active');
+                link.setAttribute('aria-expanded', 'true');
+                link.closest('.section').classList.add('detail-open');
+                current = { link, el };
+            }
+
+            function closeInline(opts) {
+                if (!current) return;
+                const { link, el } = current;
+                current = null;
+                el.classList.remove('open');
+                link.classList.remove('active');
+                link.setAttribute('aria-expanded', 'false');
+                link.closest('.section').classList.remove('detail-open');
+                if (opts && opts.focus) link.focus();
+
+                let done = false;
+                const remove = () => { if (!done) { done = true; el.remove(); } };
+                el.addEventListener('transitionend', e => {
+                    if (e.target === el && e.propertyName === 'grid-template-rows') remove();
+                });
+                setTimeout(remove, 600);
+            }
+
+            setVw();
+            window.addEventListener('resize', () => {
+                setVw();
+                document.querySelectorAll('.detail-strip').forEach(fitStrip);
+            });
+
+            links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    openPanel(this);
+                    if (compact.matches) openPanel(this); else openInline(this);
                 });
             });
 
             closeBtn.addEventListener('click', closePanel);
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && panel.classList.contains('open')) {
-                    closePanel();
+            // collapsing the archives also collapses a project opened inside them
+            document.getElementById('archives-toggle').addEventListener('click', function() {
+                if (current && this.getAttribute('aria-expanded') === 'false' && current.el.closest('#archives')) {
+                    closeInline();
                 }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key !== 'Escape') return;
+                if (panel.classList.contains('open')) closePanel();
+                else if (current) closeInline({ focus: true });
+            });
+
+            compact.addEventListener('change', function() {
+                closePanel();
+                closeInline();
             });
         })();
     </script>
