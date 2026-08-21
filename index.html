@@ -77,7 +77,7 @@
             <div class="entry">
                 <div class="entry-title"><a href="#" id="archives-toggle" class="archives-toggle" aria-expanded="false">archives<span class="triangle"></span></a></div>
             </div>
-            <div id="archives" hidden>
+            <div id="archives" class="archives">
                 <div class="entry">
                     <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-haspopup="dialog">useless donut</a></div>
                     <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-haspopup="dialog">betglobal</a></div>
@@ -125,7 +125,14 @@
         </div>
 
         <div class="footer">
-            end
+            <span>end</span>
+            <a class="footer-social" href="https://www.instagram.com/txiong.7/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"></rect>
+                    <circle cx="12" cy="12" r="4.2"></circle>
+                    <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"></circle>
+                </svg>
+            </a>
         </div>
     </div>
 
@@ -232,7 +239,7 @@
             const archives = document.getElementById('archives');
             const expanded = this.getAttribute('aria-expanded') === 'true';
             this.setAttribute('aria-expanded', String(!expanded));
-            archives.hidden = expanded;
+            archives.classList.toggle('open', !expanded);
         });
 
         (function setupProjectPanel() {
