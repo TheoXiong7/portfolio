@@ -24,6 +24,7 @@ Desktop.ini
 archive/
 dev/
 
-# Claude
+# agents
+.pi/
 .claude/
 CLAUDE.md

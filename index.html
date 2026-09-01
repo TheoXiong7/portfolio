@@ -316,6 +316,13 @@
         </template>
     </div>
 
+    <div class="image-zoom" role="dialog" aria-modal="true" aria-label="Expanded project image" aria-hidden="true" hidden>
+        <div class="image-zoom-backdrop" aria-hidden="true"></div>
+        <button class="image-zoom-close" type="button" aria-label="Close expanded image">&times;</button>
+        <img class="image-zoom-media" alt="">
+        <p class="image-zoom-caption"></p>
+    </div>
+
     <script>
         (function setupThemeToggle() {
             const btn = document.querySelector('.theme-toggle');
@@ -519,6 +526,145 @@
             compact.addEventListener('change', function() {
                 closePanel();
                 closeInline();
+            });
+        })();
+
+        (function setupImageZoom() {
+            const zoom = document.querySelector('.image-zoom');
+            const zoomImage = zoom.querySelector('.image-zoom-media');
+            const caption = zoom.querySelector('.image-zoom-caption');
+            const closeButton = zoom.querySelector('.image-zoom-close');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let sourceImage = null;
+            let closeTimer = null;
+
+            // Templates retain these attributes when cloned into either detail layout.
+            document.querySelectorAll('.project-data template').forEach(template => {
+                template.content.querySelectorAll('.panel-figure img').forEach(image => {
+                    image.tabIndex = 0;
+                    image.setAttribute('role', 'button');
+                    image.setAttribute('aria-label', 'Zoom image: ' + image.alt);
+                    image.draggable = false;
+                });
+            });
+
+            function targetRect(image) {
+                const gutter = window.innerWidth <= 640 ? 16 : 40;
+                const captionSpace = caption.textContent ? 76 : 40;
+                const maxWidth = window.innerWidth - gutter * 2;
+                const maxHeight = window.innerHeight - gutter - captionSpace;
+                const ratio = (image.naturalWidth && image.naturalHeight)
+                    ? image.naturalWidth / image.naturalHeight
+                    : image.getBoundingClientRect().width / image.getBoundingClientRect().height;
+                let width = maxWidth;
+                let height = width / ratio;
+                if (height > maxHeight) {
+                    height = maxHeight;
+                    width = height * ratio;
+                }
+                return {
+                    left: (window.innerWidth - width) / 2,
+                    top: (window.innerHeight - height - (caption.textContent ? 28 : 0)) / 2,
+                    width,
+                    height
+                };
+            }
+
+            function setGeometry(fromRect) {
+                const target = targetRect(sourceImage || zoomImage);
+                const fromCenterX = fromRect.left + fromRect.width / 2;
+                const fromCenterY = fromRect.top + fromRect.height / 2;
+                const targetCenterX = target.left + target.width / 2;
+                const targetCenterY = target.top + target.height / 2;
+                zoom.style.setProperty('--zoom-left', target.left + 'px');
+                zoom.style.setProperty('--zoom-top', target.top + 'px');
+                zoom.style.setProperty('--zoom-width', target.width + 'px');
+                zoom.style.setProperty('--zoom-height', target.height + 'px');
+                zoom.style.setProperty('--zoom-from',
+                    'translate3d(' + (fromCenterX - targetCenterX) + 'px,' +
+                    (fromCenterY - targetCenterY) + 'px,0) scale(' +
+                    (fromRect.width / target.width) + ',' + (fromRect.height / target.height) + ')');
+            }
+
+            function openZoom(image) {
+                if (sourceImage || !image.complete) return;
+                clearTimeout(closeTimer);
+                sourceImage = image;
+                const figureCaption = image.closest('.panel-figure')?.querySelector('figcaption');
+                caption.textContent = figureCaption?.textContent.trim() || image.alt;
+                zoomImage.src = image.currentSrc || image.src;
+                zoomImage.alt = image.alt;
+                setGeometry(image.getBoundingClientRect());
+                zoom.hidden = false;
+                zoom.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('image-zoom-open');
+                image.setAttribute('aria-expanded', 'true');
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    zoom.classList.add('is-open');
+                    closeButton.focus({ preventScroll: true });
+                }));
+            }
+
+            function closeZoom() {
+                if (!sourceImage) return;
+                const restoreFocus = sourceImage;
+                const rect = sourceImage.isConnected ? sourceImage.getBoundingClientRect() : null;
+                if (rect && rect.width && rect.height) setGeometry(rect);
+                zoom.classList.remove('is-open');
+                zoom.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('image-zoom-open');
+                restoreFocus.setAttribute('aria-expanded', 'false');
+                sourceImage = null;
+
+                const finish = () => {
+                    zoom.hidden = true;
+                    zoomImage.removeAttribute('src');
+                    restoreFocus.focus({ preventScroll: true });
+                };
+                if (reduceMotion.matches) finish();
+                else closeTimer = setTimeout(finish, 400);
+            }
+
+            document.addEventListener('click', event => {
+                const image = event.target.closest('.panel-figure img');
+                if (image) {
+                    event.preventDefault();
+                    openZoom(image);
+                }
+            });
+
+            zoom.addEventListener('click', event => {
+                if (event.target === closeButton || event.target === zoomImage || event.target.classList.contains('image-zoom-backdrop')) {
+                    closeZoom();
+                }
+            });
+
+            document.addEventListener('keydown', event => {
+                if (sourceImage) {
+                    if (event.key === 'Escape') {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        closeZoom();
+                    } else if (event.key === 'Tab') {
+                        event.preventDefault();
+                        closeButton.focus();
+                    }
+                    return;
+                }
+                const image = event.target.closest?.('.panel-figure img');
+                if (image && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    openZoom(image);
+                }
+            }, true);
+
+            window.addEventListener('resize', () => {
+                if (!sourceImage) return;
+                const rect = targetRect(sourceImage);
+                zoom.style.setProperty('--zoom-left', rect.left + 'px');
+                zoom.style.setProperty('--zoom-top', rect.top + 'px');
+                zoom.style.setProperty('--zoom-width', rect.width + 'px');
+                zoom.style.setProperty('--zoom-height', rect.height + 'px');
             });
         })();
     </script>
