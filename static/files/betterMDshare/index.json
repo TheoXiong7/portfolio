@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-03T17:56:06.883Z",
+  "generated": "2026-09-03T17:56:11.937Z",
   "root": {
     "name": "~",
     "type": "dir",
@@ -8,12 +8,6 @@
         "name": "ECE445",
         "type": "dir",
         "children": []
-      },
-      {
-        "name": "README.md",
-        "type": "file",
-        "size": 269,
-        "mtime": "2026-09-02T22:48:58Z"
       },
       {
         "name": "todo.md",
