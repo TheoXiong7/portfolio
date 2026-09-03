@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- One-time setup for betterMDshare write access: seals a GitHub token with a passphrase into vault.json.
+     Everything here runs in the browser; nothing is sent anywhere except the optional token check against api.github.com. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>betterMDshare setup</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/files/favicons/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&family=DM+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script>
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+</head>
+<body class="md-app">
+    <main class="page md-setup">
+        <div class="md-head">
+            <div><a class="md-back" href="./">← betterMDshare</a></div>
+            <div class="md-title">set up write access</div>
+            <div class="md-sub">one-time. seals a github token with a passphrase, entirely in this browser.</div>
+        </div>
+
+        <section>
+            <div class="md-step-title">1 · make a token</div>
+            <p>Create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">fine-grained personal access token</a>. Repository access: only <code>TheoXiong7/portfolio</code>. Permissions: <em>Contents · read and write</em>, nothing else. Pick an expiry; you'll come back here to re-seal when it lapses.</p>
+            <div class="md-inline">
+                <input class="md-input" id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" aria-label="GitHub token">
+                <button type="button" class="md-btn" id="check-token">check</button>
+            </div>
+            <div class="md-hint" id="token-status"></div>
+        </section>
+
+        <section>
+            <div class="md-step-title">2 · choose a passphrase</div>
+            <p>The sealed file is public, so anyone can download it and guess offline at a few thousand tries per second per GPU. That's harmless when the passphrase is long and random: use the generator, or five or more random words. Never a reused password.</p>
+            <div class="md-inline">
+                <input class="md-input" id="pass" type="text" autocomplete="off" spellcheck="false" placeholder="passphrase" aria-label="Passphrase">
+                <button type="button" class="md-btn" id="gen">generate</button>
+            </div>
+            <div class="md-hint" id="pass-strength"></div>
+        </section>
+
+        <section>
+            <div class="md-step-title">3 · seal</div>
+            <p>Derives a key from the passphrase (PBKDF2-SHA256, 600k rounds) and encrypts the token with AES-256-GCM.</p>
+            <button type="button" class="md-btn primary" id="seal">seal →</button>
+            <div class="md-error" id="seal-error" hidden></div>
+            <div id="seal-out" hidden>
+                <div class="md-hint" style="margin-top: 16px;">save this as <code>static/files/betterMDshare/vault.json</code>, commit, push. from then on the app unlocks with the passphrase from any browser.</div>
+                <textarea class="md-code" id="vault" rows="9" readonly spellcheck="false" aria-label="vault.json"></textarea>
+                <button type="button" class="md-btn" id="copy">copy</button>
+            </div>
+        </section>
+
+        <section>
+            <div class="md-step-title">check an existing vault</div>
+            <div class="md-inline">
+                <button type="button" class="md-btn" id="load-vault">load the deployed vault.json</button>
+                <span class="md-hint" id="load-status"></span>
+            </div>
+            <textarea class="md-code" id="check-vault" rows="6" spellcheck="false" placeholder="paste vault.json" aria-label="vault.json to test"></textarea>
+            <div class="md-inline">
+                <input class="md-input" id="check-pass" type="password" autocomplete="off" placeholder="passphrase" aria-label="Passphrase to test">
+                <button type="button" class="md-btn" id="check">try unlock</button>
+            </div>
+            <div class="md-hint" id="check-status"></div>
+        </section>
+
+        <section>
+            <div class="md-step-title">how this holds up</div>
+            <ul>
+                <li>Nothing secret is in the site's code. The only secret is the passphrase in your head; the token exists in plaintext only in the browser session that unlocked it.</li>
+                <li>What the token can do if it ever leaks: push commits to this one repo until it expires or you revoke it at <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a>.</li>
+                <li>A generated passphrase has ~79 bits of entropy. At 600k PBKDF2 rounds that's on the order of a billion GPU-years to exhaust, so the vault being public is fine.</li>
+                <li>To rotate: make a new token, seal it here, replace vault.json, revoke the old token.</li>
+            </ul>
+        </section>
+
+        <div class="footer">
+            <span>end</span>
+            <span>runs locally</span>
+        </div>
+    </main>
+
+    <script>
+    (function () {
+        'use strict';
+        const $ = id => document.getElementById(id);
+        const OWNER = 'TheoXiong7', REPO = 'portfolio', ITER = 600000;
+        const enc = new TextEncoder();
+
+        const toB64 = bytes => btoa(String.fromCharCode(...bytes));
+        function fromB64(b64) {
+            const bin = atob(String(b64).replace(/\s/g, ''));
+            const out = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+            return out;
+        }
+
+        async function deriveKey(pass, salt, iter, usage) {
+            const material = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']);
+            return crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: iter }, material, { name: 'AES-GCM', length: 256 }, false, [usage]);
+        }
+
+        async function seal(pass, token) {
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveKey(pass, salt, ITER, 'encrypt');
+            const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(token)));
+            return { v: 1, kdf: 'PBKDF2-SHA256', iter: ITER, salt: toB64(salt), iv: toB64(iv), ct: toB64(ct), created: new Date().toISOString() };
+        }
+
+        async function open(vault, pass) {
+            const key = await deriveKey(pass, fromB64(vault.salt), vault.iter || ITER, 'decrypt');
+            const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(vault.iv) }, key, fromB64(vault.ct));
+            return new TextDecoder().decode(plain);
+        }
+
+        // 4 groups of 4 from a 31-char alphabet (no i/l/o/0/1): ~79 bits, typeable
+        function generate() {
+            const alphabet = 'abcdefghjkmnpqrstuvwxyz23456789';
+            const bytes = crypto.getRandomValues(new Uint8Array(64));
+            let out = '', used = 0;
+            for (const b of bytes) {
+                if (b >= 248) continue; // rejection sampling keeps it uniform (248 = 8 * 31)
+                out += alphabet[b % 31];
+                if (++used === 16) break;
+            }
+            return out.match(/.{1,4}/g).join('-');
+        }
+
+        function entropyBits(pass) {
+            if (/^[a-z0-9]{4}(-[a-z0-9]{4}){3}$/.test(pass)) return 79; // our generator: 16 symbols from 31
+            const words = pass.trim().split(/[\s-]+/).filter(w => w.length >= 3);
+            if (words.length >= 4 && words.every(w => /^[a-z]+$/i.test(w))) return Math.round(words.length * 12.9); // diceware-ish
+            const chars = pass.replace(/[\s-]/g, '');
+            let pool = 0;
+            if (/[a-z]/.test(chars)) pool += 26;
+            if (/[A-Z]/.test(chars)) pool += 26;
+            if (/\d/.test(chars)) pool += 10;
+            if (/[^a-zA-Z\d]/.test(chars)) pool += 20;
+            return Math.round(chars.length * Math.log2(pool || 1));
+        }
+
+        function strength() {
+            const pass = $('pass').value.trim();
+            const el = $('pass-strength');
+            if (!pass) { el.textContent = ''; return; }
+            const bits = entropyBits(pass);
+            el.textContent = '≈ ' + bits + ' bits' + (bits < 60 ? ' — too guessable for a public vault. aim for 70+.' : bits < 70 ? ' — okay. more is cheap.' : ' — good.');
+        }
+
+        $('gen').addEventListener('click', () => { $('pass').value = generate(); strength(); });
+        $('pass').addEventListener('input', strength);
+
+        $('check-token').addEventListener('click', async () => {
+            const token = $('token').value.trim();
+            const el = $('token-status');
+            if (!token) { el.textContent = 'paste a token first'; return; }
+            el.textContent = 'checking…';
+            try {
+                const res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } });
+                if (res.status === 401) { el.textContent = 'github rejected it (401)'; return; }
+                if (!res.ok) { el.textContent = 'github said ' + res.status; return; }
+                const data = await res.json();
+                el.textContent = data.permissions && data.permissions.push ? 'ok — this token can push to ' + OWNER + '/' + REPO : 'the token can read the repo but not write to it — check the Contents permission';
+            } catch (e) {
+                el.textContent = 'network error: ' + e.message;
+            }
+        });
+
+        $('seal').addEventListener('click', async () => {
+            const token = $('token').value.trim();
+            const pass = $('pass').value.trim();
+            const err = $('seal-error');
+            err.hidden = true;
+            $('seal-out').hidden = true;
+            if (!window.isSecureContext || !crypto.subtle) { err.textContent = 'needs https or localhost'; err.hidden = false; return; }
+            if (!token) { err.textContent = 'paste the token first'; err.hidden = false; return; }
+            if (!pass) { err.textContent = 'choose a passphrase first'; err.hidden = false; return; }
+            if (entropyBits(pass) < 60) { err.textContent = 'that passphrase is too weak for a public vault — generate one or use 5+ random words'; err.hidden = false; return; }
+            $('seal').disabled = true;
+            $('seal').textContent = 'sealing…';
+            try {
+                const vault = await seal(pass, token);
+                $('vault').value = JSON.stringify(vault, null, 2) + '\n';
+                $('seal-out').hidden = false;
+            } catch (e) {
+                err.textContent = 'failed: ' + e.message;
+                err.hidden = false;
+            } finally {
+                $('seal').disabled = false;
+                $('seal').textContent = 'seal →';
+            }
+        });
+
+        $('copy').addEventListener('click', () => {
+            navigator.clipboard.writeText($('vault').value).then(() => {
+                $('copy').textContent = 'copied';
+                setTimeout(() => { $('copy').textContent = 'copy'; }, 1400);
+            }).catch(() => {});
+        });
+
+        $('load-vault').addEventListener('click', async () => {
+            const el = $('load-status');
+            el.textContent = 'loading…';
+            try {
+                const res = await fetch('../static/files/betterMDshare/vault.json', { cache: 'no-store' });
+                if (res.status === 404) { el.textContent = 'no vault.json deployed yet'; return; }
+                $('check-vault').value = await res.text();
+                el.textContent = 'loaded';
+            } catch (e) {
+                el.textContent = 'couldn\'t load it: ' + e.message;
+            }
+        });
+
+        $('check').addEventListener('click', async () => {
+            const el = $('check-status');
+            let vault;
+            try { vault = JSON.parse($('check-vault').value); } catch (e) { el.textContent = 'that isn\'t valid json'; return; }
+            const pass = $('check-pass').value.trim();
+            if (!pass) { el.textContent = 'type the passphrase'; return; }
+            el.textContent = 'trying… (this takes a second on purpose)';
+            try {
+                const token = await open(vault, pass);
+                el.textContent = 'unlocked — token starts with ' + token.slice(0, 14) + '…';
+            } catch (e) {
+                el.textContent = 'no — wrong passphrase, or a different vault';
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

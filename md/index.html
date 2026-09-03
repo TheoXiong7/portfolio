@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<!-- betterMDshare: a static markdown workspace. Reads come straight from the repo via GitHub Pages;
+     writes commit to GitHub from the browser once a passphrase unseals the token in vault.json (see setup.html). -->
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGQZQSLB13"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-JGQZQSLB13');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>betterMDshare</title>
+    <meta name="description" content="markdown, edited and shared without the fuss">
+    <meta name="author" content="Theo Xiong">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../static/files/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/files/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/files/favicons/favicon-16x16.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&family=DM+Mono:wght@400;500&display=swap">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- Theme (set before paint to prevent flash) -->
+    <script>
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = stored || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+</head>
+<body class="md-app">
+    <main id="view-list" class="page" hidden>
+        <div class="md-head">
+            <div><a class="md-back" href="../">← theo xiong</a></div>
+            <div class="md-title">betterMDshare</div>
+            <div class="md-sub">Theo Xiong</div>
+        </div>
+
+        <div class="md-bar">
+            <nav class="md-crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+            <div class="md-bar-actions">
+                <button type="button" class="md-btn" id="new-folder">+ folder</button>
+                <button type="button" class="md-btn" id="new-file">+ file</button>
+            </div>
+        </div>
+
+        <div id="list-form"></div>
+
+        <div class="md-rows" id="rows" role="list"></div>
+
+        <div class="footer">
+            <span id="list-count"></span>
+            <span class="md-status" id="list-status">~ is home</span>
+        </div>
+    </main>
+
+    <main id="view-file" class="md-file" hidden>
+        <header class="md-file-head">
+            <div class="md-file-head-left">
+                <a class="md-file-back" id="file-back" href="#"><span aria-hidden="true">←</span><span>back</span></a>
+                <div class="md-file-path">
+                    <span class="md-file-dir" id="file-dir"></span>
+                    <span id="file-name"></span>
+                    <span class="md-dirty" id="file-dirty" role="img" aria-label="unsaved changes" hidden></span>
+                    <span class="md-tag" id="file-tag">read only</span>
+                </div>
+            </div>
+            <div class="md-file-actions" id="file-actions"></div>
+        </header>
+        <div class="md-file-main" id="file-body"></div>
+        <footer class="md-file-foot">
+            <span id="file-stats"></span>
+            <span id="file-saved"></span>
+        </footer>
+    </main>
+
+    <div class="md-auth" id="auth" role="dialog" aria-modal="true" aria-labelledby="auth-title" hidden>
+        <form id="auth-form">
+            <div class="md-auth-title" id="auth-title">unlock editing</div>
+            <div class="md-hint" id="auth-hint">writes need a passphrase. reading is always open.</div>
+            <input class="md-input" type="password" id="auth-pass" autocomplete="current-password" placeholder="passphrase" aria-label="Passphrase">
+            <div class="md-error" id="auth-error" hidden></div>
+            <div class="md-form-foot">
+                <button type="button" class="md-text-btn" id="auth-cancel">cancel</button>
+                <button type="submit" class="md-btn primary" id="auth-submit">unlock →</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ---- where things live ------------------------------------------------ */
+        const CONFIG = {
+            owner: 'TheoXiong7',
+            repo: 'portfolio',
+            branch: 'main',
+            root: 'static/files/betterMDshare',            // the notes folder, as a path inside the repo
+            staticBase: '../static/files/betterMDshare/',  // the same folder as served next to this page
+            manifest: 'index.json',                        // generated listing of the folder
+            vault: 'vault.json'                            // the GitHub token, sealed with the passphrase
+        };
+        const RESERVED = new Set([CONFIG.manifest, CONFIG.vault]);
+        const API = 'https://api.github.com';
+        const REPO = '/repos/' + CONFIG.owner + '/' + CONFIG.repo;
+
+        const $ = id => document.getElementById(id);
+        const views = { list: $('view-list'), file: $('view-file') };
+
+        /* ---- state --------------------------------------------------------------- */
+        let tree = null;         // manifest root node { name:'~', type:'dir', children:[...] }
+        let treeError = null;
+        let token = null;        // GitHub token while unlocked (session only)
+        let route = { kind: 'list', segs: [] };
+        let listForm = null;     // { kind:'file'|'folder'|'rename'|'delete', target, type, count, name, error, busy }
+        let file = null;         // the open file's view state
+        let pendingEdit = false; // open the next file straight into the editor
+        let afterUnlock = null;  // continuation once the passphrase is accepted
+
+        try { token = sessionStorage.getItem('mdshare-token') || null; } catch (e) {}
+
+        /* ---- small helpers --------------------------------------------------------- */
+        function h(tag, attrs, ...kids) {
+            const el = document.createElement(tag);
+            if (attrs) {
+                for (const [k, v] of Object.entries(attrs)) {
+                    if (v == null || v === false) continue;
+                    if (k === 'class') el.className = v;
+                    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+                    else if (v === true) el.setAttribute(k, '');
+                    else el.setAttribute(k, v);
+                }
+            }
+            for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid);
+            return el;
+        }
+
+        function icon(markup) {
+            const span = h('span', { class: 'md-icon', 'aria-hidden': 'true' });
+            span.innerHTML = markup;
+            return span;
+        }
+        const ICON_DIR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2.5 5.5h5l1.5 1.5h8.5v8.5h-15z"/></svg>';
+        const ICON_FILE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z"/><path d="M12 2.5v3.5h3.5"/></svg>';
+        const ICON_UP = '<span class="md-up-glyph"></span>';
+
+        const encodePath = rel => rel.split('/').map(encodeURIComponent).join('/');
+        const byteLen = s => new TextEncoder().encode(s).length;
+        const utf8 = bytes => new TextDecoder().decode(bytes);
+        function fromB64(b64) {
+            const bin = atob(String(b64).replace(/\s/g, ''));
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return bytes;
+        }
+        function fmtSize(n) {
+            if (n == null) return '';
+            if (n < 1024) return n + ' b';
+            if (n < 1048576) return (n / 1024).toFixed(1) + ' kb';
+            return (n / 1048576).toFixed(1) + ' mb';
+        }
+        function fmtAgo(iso) {
+            const t = Date.parse(iso || '');
+            if (isNaN(t)) return '';
+            const days = Math.floor((Date.now() - t) / 86400000);
+            if (days <= 0) return 'today';
+            if (days === 1) return 'yesterday';
+            if (days < 7) return days + 'd ago';
+            if (days < 30) return Math.floor(days / 7) + 'w ago';
+            if (days < 365) return Math.floor(days / 30) + 'mo ago';
+            return Math.floor(days / 365) + 'y ago';
+        }
+        const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+        const clock = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        /* ---- the tree (manifest) --------------------------------------------------- */
+        const emptyRoot = () => ({ name: '~', type: 'dir', children: [] });
+
+        function resolveDir(segs) {
+            let node = tree;
+            for (const seg of segs) {
+                node = node && (node.children || []).find(c => c.name === seg && c.type === 'dir');
+                if (!node) return null;
+            }
+            return node;
+        }
+
+        function findNode(segs) {
+            const dir = resolveDir(segs.slice(0, -1));
+            return dir ? (dir.children || []).find(c => c.name === segs[segs.length - 1]) || null : null;
+        }
+
+        function flattenMtimes(node, prefix, out) {
+            out = out || new Map();
+            for (const c of (node && node.children) || []) {
+                const rel = prefix ? prefix + '/' + c.name : c.name;
+                if (c.type === 'dir') flattenMtimes(c, rel, out);
+                else out.set(rel, c.mtime);
+            }
+            return out;
+        }
+
+        function sortChildren(node) {
+            node.children.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+            node.children.forEach(c => { if (c.type === 'dir') sortChildren(c); });
+        }
+
+        // flat: Map(rel -> { size, mtime? }) of every blob under the root, straight from git
+        function buildManifest(flat, prevMtimes, now) {
+            const root = emptyRoot();
+            for (const rel of [...flat.keys()].sort()) {
+                if (RESERVED.has(rel)) continue;
+                const segs = rel.split('/');
+                let node = root;
+                for (let i = 0; i < segs.length - 1; i++) {
+                    let next = node.children.find(c => c.name === segs[i] && c.type === 'dir');
+                    if (!next) { next = { name: segs[i], type: 'dir', children: [] }; node.children.push(next); }
+                    node = next;
+                }
+                const name = segs[segs.length - 1];
+                if (name.startsWith('.')) continue; // a folder's .keep holds the folder but stays hidden
+                const info = flat.get(rel);
+                node.children.push({ name, type: 'file', size: info.size, mtime: info.mtime || prevMtimes.get(rel) || now });
+            }
+            sortChildren(root);
+            return { generated: now, root };
+        }
+
+        /* ---- reading: static files, or the API once unlocked ----------------------- */
+        async function gh(path, opts) {
+            opts = opts || {};
+            const headers = {
+                Accept: 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28',
+                Authorization: 'Bearer ' + token
+            };
+            if (opts.body) headers['Content-Type'] = 'application/json';
+            const res = await fetch(API + path, { method: opts.method || 'GET', headers, body: opts.body ? JSON.stringify(opts.body) : undefined });
+            if (res.status === 404 && opts.allow404) return null;
+            if (!res.ok) {
+                const err = new Error('github ' + res.status);
+                err.status = res.status;
+                try { err.detail = (await res.json()).message; } catch (e) {}
+                throw err;
+            }
+            return res.status === 204 ? null : res.json();
+        }
+
+        function lock() {
+            token = null;
+            try { sessionStorage.removeItem('mdshare-token'); } catch (e) {}
+        }
+
+        // text of a file under the notes folder, or null if it isn't there
+        async function fetchText(rel) {
+            if (token) {
+                try {
+                    const data = await gh(REPO + '/contents/' + encodePath(CONFIG.root + '/' + rel) + '?ref=' + encodeURIComponent(CONFIG.branch), { allow404: true });
+                    if (data === null) return null;
+                    if (typeof data.content === 'string') return utf8(fromB64(data.content));
+                } catch (e) {
+                    if (e.status === 401) lock();
+                    // anything else: fall back to the static copy below
+                }
+            }
+            const res = await fetch(CONFIG.staticBase + encodePath(rel), { cache: 'no-store' });
+            if (res.status === 404) return null;
+            if (!res.ok) throw new Error('fetch failed (' + res.status + ')');
+            return res.text();
+        }
+
+        async function loadTree() {
+            treeError = null;
+            try {
+                const text = await fetchText(CONFIG.manifest);
+                const data = text ? JSON.parse(text) : null;
+                tree = (data && data.root && Array.isArray(data.root.children)) ? data.root : emptyRoot();
+            } catch (e) {
+                treeError = e;
+                tree = tree || emptyRoot();
+            }
+        }
+
+        /* ---- writing: one commit per action, manifest included ---------------------- */
+        // changes: { message, writes:[{rel, content}], deletes:[rel], moves:[{from, to}] } - rels may be files or folders
+        async function commitChanges(changes) {
+            if (!token) { const e = new Error('locked'); e.locked = true; throw e; }
+            const now = new Date().toISOString();
+            const prevMtimes = flattenMtimes(tree, '');
+            const rootPrefix = CONFIG.root + '/';
+            const under = (rel, prefix) => rel === prefix || rel.startsWith(prefix + '/');
+            let lastErr = null;
+
+            for (let attempt = 0; attempt < 2; attempt++) {
+                const ref = await gh(REPO + '/git/ref/heads/' + encodeURIComponent(CONFIG.branch));
+                const headSha = ref.object.sha;
+                const head = await gh(REPO + '/git/commits/' + headSha);
+                const listing = await gh(REPO + '/git/trees/' + head.tree.sha + '?recursive=1');
+
+                const flat = new Map();
+                for (const e of listing.tree) {
+                    if (e.type === 'blob' && e.path.startsWith(rootPrefix)) flat.set(e.path.slice(rootPrefix.length), { sha: e.sha, size: e.size, mode: e.mode });
+                }
+
+                const entries = [];
+                for (const m of changes.moves || []) {
+                    for (const [rel, info] of [...flat]) {
+                        if (!under(rel, m.from)) continue;
+                        const to = m.to + rel.slice(m.from.length);
+                        entries.push({ path: rootPrefix + to, mode: info.mode, type: 'blob', sha: info.sha });
+                        entries.push({ path: rootPrefix + rel, mode: info.mode, type: 'blob', sha: null });
+                        flat.delete(rel);
+                        flat.set(to, { sha: info.sha, size: info.size, mode: info.mode, mtime: prevMtimes.get(rel) });
+                    }
+                }
+                for (const d of changes.deletes || []) {
+                    for (const [rel, info] of [...flat]) {
+                        if (!under(rel, d)) continue;
+                        entries.push({ path: rootPrefix + rel, mode: info.mode, type: 'blob', sha: null });
+                        flat.delete(rel);
+                    }
+                }
+                for (const w of changes.writes || []) {
+                    entries.push({ path: rootPrefix + w.rel, mode: '100644', type: 'blob', content: w.content });
+                    flat.set(w.rel, { size: byteLen(w.content), mtime: now });
+                }
+                const manifest = buildManifest(flat, prevMtimes, now);
+                entries.push({ path: rootPrefix + CONFIG.manifest, mode: '100644', type: 'blob', content: JSON.stringify(manifest, null, 2) + '\n' });
+
+                const newTree = await gh(REPO + '/git/trees', { method: 'POST', body: { base_tree: head.tree.sha, tree: entries } });
+                const newCommit = await gh(REPO + '/git/commits', { method: 'POST', body: { message: changes.message, tree: newTree.sha, parents: [headSha] } });
+                try {
+                    await gh(REPO + '/git/refs/heads/' + encodeURIComponent(CONFIG.branch), { method: 'PATCH', body: { sha: newCommit.sha } });
+                    tree = manifest.root;
+                    return newCommit.sha;
+                } catch (e) {
+                    lastErr = e;
+                    if (e.status !== 422 && e.status !== 409) throw e; // branch moved under us: rebuild on the new head
+                }
+            }
+            throw lastErr;
+        }
+
+        function describeError(e) {
+            if (!e) return 'something went wrong';
+            if (e.locked) return 'locked — unlock first';
+            if (e instanceof UnlockError) return e.message;
+            if (e.status === 401) return 'github rejected the token — it may have expired. unlock again, or re-seal it via setup.html';
+            if (e.status === 403) return 'github refused (' + (e.detail || 'forbidden') + ') — check the token has contents: read and write on ' + CONFIG.owner + '/' + CONFIG.repo;
+            if (e.status === 404) return 'github can\'t see ' + CONFIG.owner + '/' + CONFIG.repo + ' with this token';
+            if (e.status) return 'github error ' + e.status + (e.detail ? ': ' + e.detail : '');
+            return e.message || 'something went wrong';
+        }
+
+        /* ---- the passphrase: unseals the token in vault.json ------------------------ */
+        class UnlockError extends Error {}
+
+        async function unlock(pass) {
+            if (!window.isSecureContext || !crypto.subtle) throw new UnlockError('unlocking needs https (or localhost)');
+            const res = await fetch(CONFIG.staticBase + CONFIG.vault, { cache: 'no-store' });
+            if (res.status === 404) throw new UnlockError('write access isn\'t set up yet — open setup.html to seal a token');
+            if (!res.ok) throw new UnlockError('couldn\'t load the vault (' + res.status + ')');
+            let vault;
+            try { vault = await res.json(); } catch (e) { throw new UnlockError('vault.json isn\'t valid json'); }
+            if (!vault || vault.kdf !== 'PBKDF2-SHA256' || !vault.salt || !vault.iv || !vault.ct) throw new UnlockError('vault.json isn\'t in the expected format');
+
+            const enc = new TextEncoder();
+            const material = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']);
+            const key = await crypto.subtle.deriveKey(
+                { name: 'PBKDF2', hash: 'SHA-256', salt: fromB64(vault.salt), iterations: vault.iter || 600000 },
+                material, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+            let plain;
+            try {
+                plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(vault.iv) }, key, fromB64(vault.ct));
+            } catch (e) {
+                throw new UnlockError('that\'s not it — try again');
+            }
+            token = utf8(plain).trim();
+            try { sessionStorage.setItem('mdshare-token', token); } catch (e) {}
+        }
+
+        const auth = { el: $('auth'), form: $('auth-form'), hint: $('auth-hint'), input: $('auth-pass'), error: $('auth-error'), submit: $('auth-submit'), cancel: $('auth-cancel') };
+
+        function showError(el, msg) {
+            el.textContent = msg || '';
+            el.hidden = !msg;
+        }
+
+        function requestUnlock(hint, then) {
+            afterUnlock = then || null;
+            auth.hint.textContent = hint || 'writes need a passphrase. reading is always open.';
+            auth.input.value = '';
+            showError(auth.error, '');
+            auth.el.hidden = false;
+            auth.input.focus();
+        }
+
+        function closeAuth() {
+            auth.el.hidden = true;
+            auth.input.value = '';
+            afterUnlock = null;
+        }
+
+        // run fn now if unlocked, otherwise after the passphrase is accepted
+        function gated(hint, fn) {
+            if (token) fn(); else requestUnlock(hint, fn);
+        }
+
+        auth.form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const pass = auth.input.value.trim();
+            if (!pass || auth.submit.disabled) return;
+            auth.submit.disabled = true;
+            auth.submit.textContent = 'unlocking…';
+            try {
+                await unlock(pass);
+                await loadTree(); // reads go through the API now; a 401 here means the sealed token is dead
+                if (!token) throw new UnlockError('right passphrase, but github rejected the sealed token — it may have expired. re-seal it via setup.html');
+                const then = afterUnlock;
+                closeAuth();
+                repaint();
+                if (then) then();
+            } catch (err) {
+                showError(auth.error, describeError(err));
+                auth.input.value = '';
+                auth.input.focus();
+            } finally {
+                auth.submit.disabled = false;
+                auth.submit.textContent = 'unlock →';
+            }
+        });
+        auth.cancel.addEventListener('click', closeAuth);
+        auth.el.addEventListener('click', e => { if (e.target === auth.el) closeAuth(); });
+
+        /* ---- markdown -> html (escapes everything, only emits its own tags) --------- */
+        const md = (function () {
+            const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+            function joinRel(baseDir, path) {
+                const out = baseDir ? baseDir.split('/') : [];
+                for (const seg of path.split('/')) {
+                    if (!seg || seg === '.') continue;
+                    if (seg === '..') { if (out.length && out[out.length - 1] !== '..') out.pop(); else out.push('..'); }
+                    else out.push(seg);
+                }
+                return out.join('/');
+            }
+
+            // -> { url, external } or null when the target isn't something we'll link to
+            function resolveUrl(raw, ctx, isImage) {
+                const u = raw.replace(/[\s\u0000-\u001f\u007f]/g, '');
+                if (!u) return null;
+                if (/^(https?:|mailto:)/i.test(u)) return { url: u, external: true };
+                if (/^[a-z][a-z0-9+.-]*:/i.test(u) || u.startsWith('//')) return null; // javascript:, data:, protocol-relative…
+                if (u.startsWith('#')) return { url: u, external: false };
+                if (u.startsWith('/')) return { url: u, external: true };
+                const rel = joinRel(ctx.baseDir || '', u);
+                if (!isImage && /\.md$/i.test(rel) && !rel.startsWith('..')) return { url: '#' + encodePath(rel), external: false };
+                return { url: CONFIG.staticBase + encodePath(rel), external: !isImage };
+            }
+
+            function inline(src, ctx, noLinks) {
+                const slots = [];
+                const stash = html => { slots.push(html); return '\u0000' + (slots.length - 1) + '\u0000'; };
+                let t = src.replace(/`([^`\n]+)`/g, (m, code) => stash('<code>' + esc(code) + '</code>'));
+                if (!noLinks) {
+                    t = t.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (m, alt, href) => {
+                        const r = resolveUrl(href, ctx, true);
+                        return r ? stash('<img src="' + esc(r.url) + '" alt="' + esc(alt) + '" loading="lazy">') : m;
+                    });
+                    t = t.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (m, label, href) => {
+                        const r = resolveUrl(href, ctx, false);
+                        if (!r) return m;
+                        const attrs = r.external ? ' target="_blank" rel="noopener"' : '';
+                        return stash('<a href="' + esc(r.url) + '"' + attrs + '>' + inline(label, ctx, true) + '</a>');
+                    });
+                }
+                t = esc(t);
+                t = t.replace(/ {2,}\n/g, '<br>').replace(/\n/g, ' ');
+                t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+                t = t.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+                t = t.replace(/(^|[^*\w])\*([^*\n]+)\*(?!\w)/g, '$1<em>$2</em>');
+                t = t.replace(/(^|[^_\w])_([^_\n]+)_(?!\w)/g, '$1<em>$2</em>');
+                t = t.replace(/~~([^~\n]+)~~/g, '<del>$1</del>');
+                return t.replace(/\u0000(\d+)\u0000/g, (m, i) => slots[+i]);
+            }
+
+            const isBlockStart = l => /^(#{1,6}\s|```|>|[-*+]\s|\d+\.\s|(-{3,}|\*{3,}|_{3,})\s*$)/.test(l);
+
+            function block(text, ctx) {
+                const lines = text.split('\n');
+                const out = [];
+                let i = 0;
+                while (i < lines.length) {
+                    const l = lines[i];
+                    if (/^```/.test(l)) {
+                        const lang = l.slice(3).trim().replace(/[^\w-]/g, '');
+                        const buf = [];
+                        i++;
+                        while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
+                        i++;
+                        out.push('<pre><code' + (lang ? ' class="lang-' + esc(lang) + '"' : '') + '>' + esc(buf.join('\n')) + '</code></pre>');
+                        continue;
+                    }
+                    const heading = l.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
+                    if (heading) {
+                        const n = heading[1].length;
+                        out.push('<h' + n + '>' + inline(heading[2], ctx) + '</h' + n + '>');
+                        i++;
+                        continue;
+                    }
+                    if (/^(-{3,}|\*{3,}|_{3,})\s*$/.test(l)) { out.push('<hr>'); i++; continue; }
+                    if (/^>\s?/.test(l)) {
+                        const buf = [];
+                        while (i < lines.length && /^>\s?/.test(lines[i])) buf.push(lines[i++].replace(/^>\s?/, ''));
+                        out.push('<blockquote>' + block(buf.join('\n'), ctx) + '</blockquote>');
+                        continue;
+                    }
+                    const listStart = l.match(/^([-*+]|\d+\.)\s+/);
+                    if (listStart) {
+                        const ordered = /\d/.test(listStart[1]);
+                        const itemRe = ordered ? /^\d+\.\s+/ : /^[-*+]\s+/;
+                        const items = [];
+                        while (i < lines.length) {
+                            const cur = lines[i];
+                            if (itemRe.test(cur)) { items.push([cur.replace(itemRe, '')]); i++; continue; }
+                            const next = lines[i + 1];
+                            if (/^\s{2,}\S/.test(cur)) { items[items.length - 1].push(cur); i++; continue; }
+                            if (cur.trim() === '' && next != null && (/^\s{2,}\S/.test(next) || itemRe.test(next))) { items[items.length - 1].push(''); i++; continue; }
+                            break;
+                        }
+                        const html = items.map(parts => {
+                            let first = parts[0];
+                            let cls = '';
+                            const task = first.match(/^\[( |x|X)\]\s+/);
+                            if (task) {
+                                first = (task[1] === ' ' ? '☐ ' : '☑ ') + first.slice(task[0].length);
+                                cls = task[1] === ' ' ? ' class="task"' : ' class="task done"';
+                            }
+                            const rest = parts.slice(1);
+                            const firstIndent = rest.find(x => x.trim() !== '');
+                            let nested = '';
+                            if (firstIndent) {
+                                const indent = firstIndent.match(/^\s*/)[0].length;
+                                nested = block(rest.map(x => x.slice(Math.min(indent, x.match(/^\s*/)[0].length))).join('\n'), ctx);
+                            }
+                            return '<li' + cls + '>' + inline(first, ctx) + nested + '</li>';
+                        }).join('');
+                        out.push(ordered ? '<ol>' + html + '</ol>' : '<ul>' + html + '</ul>');
+                        continue;
+                    }
+                    if (l.trim() === '') { i++; continue; }
+                    const buf = [];
+                    while (i < lines.length && lines[i].trim() !== '' && !(buf.length && isBlockStart(lines[i]))) buf.push(lines[i++]);
+                    out.push('<p>' + inline(buf.join('\n'), ctx) + '</p>');
+                }
+                return out.join('');
+            }
+
+            return {
+                render(text, ctx) {
+                    return block(String(text || '').replace(/\r\n?/g, '\n').replace(/\u0000/g, ''), ctx || {});
+                }
+            };
+        })();
+
+        /* ---- navigation ------------------------------------------------------------- */
+        function parseHash() {
+            const raw = location.hash.replace(/^#\/?/, '');
+            const segs = raw.split('/').map(s => { try { return decodeURIComponent(s); } catch (e) { return s; } }).filter(Boolean);
+            return { segs, trailing: raw.endsWith('/') };
+        }
+
+        function hashFor(segs, isFile) {
+            return '#' + encodePath(segs.join('/')) + (segs.length && !isFile ? '/' : '');
+        }
+
+        function go(segs, opts) {
+            opts = opts || {};
+            pendingEdit = !!opts.edit;
+            const target = hashFor(segs, !!opts.file);
+            const before = location.hash;
+            location.hash = target;
+            if (location.hash === before) routeNow();
+        }
+
+        function showView(name) {
+            views.list.hidden = name !== 'list';
+            views.file.hidden = name !== 'file';
+        }
+
+        function routeNow() {
+            const { segs, trailing } = parseHash();
+            closeAuth();
+            listForm = null;
+            let kind = 'list';
+            if (segs.length && !trailing) {
+                const node = findNode(segs);
+                kind = node && node.type === 'dir' ? 'list' : 'file';
+            }
+            route = { kind, segs };
+            if (kind === 'list') {
+                file = null;
+                document.title = 'betterMDshare' + (segs.length ? ' · ~/' + segs.join('/') : '');
+                showView('list');
+                renderList();
+                window.scrollTo(0, 0);
+            } else {
+                const edit = pendingEdit;
+                pendingEdit = false;
+                openFileView(segs.join('/'), edit);
+            }
+        }
+
+        function repaint() {
+            if (route.kind === 'list') renderList();
+            else if (file) { paintFileChrome(); }
+        }
+
+        /* ---- listing view ----------------------------------------------------------- */
+        function renderList() {
+            const segs = route.segs;
+            const node = tree ? resolveDir(segs) : null;
+            const here = segs.join('/');
+
+            const crumbs = $('crumbs');
+            crumbs.replaceChildren();
+            ['~', ...segs].forEach((seg, i, all) => {
+                const last = i === all.length - 1;
+                crumbs.append(h('button', { type: 'button', class: 'md-crumb', disabled: last, 'aria-current': last ? 'location' : null, onclick: () => go(segs.slice(0, i)) }, seg));
+                if (!last) crumbs.append(h('span', { class: 'md-crumb-sep', 'aria-hidden': 'true' }, '/'));
+            });
+
+            renderListForm(node, here);
+
+            const rows = $('rows');
+            rows.replaceChildren();
+            let kids = [];
+            if (!tree) {
+                rows.append(h('div', { class: 'md-empty' }, 'loading…'));
+            } else if (!node) {
+                rows.append(h('div', { class: 'md-empty' }, 'no such folder'));
+            } else {
+                if (segs.length) {
+                    rows.append(h('div', { class: 'md-row is-up', role: 'listitem' },
+                        icon(ICON_UP),
+                        h('button', { type: 'button', class: 'md-row-name', onclick: () => go(segs.slice(0, -1)) }, h('span', null, '..')),
+                        h('span', null)));
+                }
+                kids = [...(node.children || [])].sort((a, b) => a.type === b.type ? a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }) : (a.type === 'dir' ? -1 : 1));
+                kids.forEach(kid => rows.append(row(kid)));
+                if (!kids.length) rows.append(h('div', { class: 'md-empty' }, treeError && !segs.length ? 'couldn\'t load the index — ' + describeError(treeError) : 'empty folder'));
+            }
+
+            const dirs = kids.filter(k => k.type === 'dir').length;
+            const files = kids.length - dirs;
+            $('list-count').textContent = [dirs ? plural(dirs, 'folder') : '', files ? plural(files, 'file') : ''].filter(Boolean).join(', ') || (node ? 'nothing here' : '');
+
+            const status = $('list-status');
+            status.replaceChildren();
+            if (token) status.append('unlocked · ', h('button', { type: 'button', class: 'md-text-btn', onclick: () => { lock(); renderList(); } }, 'lock'));
+            else status.append('~ is home');
+
+            function row(kid) {
+                const isDir = kid.type === 'dir';
+                const count = isDir ? (kid.children || []).length : 0;
+                const target = [...segs, kid.name];
+                return h('div', { class: 'md-row', role: 'listitem' },
+                    icon(isDir ? ICON_DIR : ICON_FILE),
+                    h('button', { type: 'button', class: 'md-row-name', onclick: () => go(target, { file: !isDir }) },
+                        h('span', null, kid.name),
+                        isDir ? h('span', { class: 'md-row-count' }, plural(count, 'item')) : null),
+                    h('div', { class: 'md-row-side' },
+                        h('div', { class: 'md-row-actions' },
+                            h('button', { type: 'button', class: 'md-text-btn small', onclick: () => gated('renaming needs a passphrase.', () => openListForm({ kind: 'rename', target: kid.name, type: kid.type })) }, 'rename'),
+                            h('button', { type: 'button', class: 'md-text-btn small', onclick: () => gated('deleting needs a passphrase.', () => openListForm({ kind: 'delete', target: kid.name, type: kid.type, count })) }, 'delete')),
+                        h('span', { class: 'md-row-meta' }, isDir ? '' : fmtSize(kid.size) + ' · ' + fmtAgo(kid.mtime))));
+            }
+        }
+
+        function openListForm(f) {
+            listForm = Object.assign({ name: f.kind === 'rename' ? f.target : '', error: '', busy: false }, f);
+            renderList();
+        }
+
+        function closeListForm() {
+            listForm = null;
+            renderList();
+        }
+
+        function renderListForm(node, here) {
+            const slot = $('list-form');
+            slot.replaceChildren();
+            const f = listForm;
+            if (!f) return;
+            const isName = f.kind !== 'delete';
+            const hints = { file: 'new file', folder: 'new folder', rename: 'rename ' + f.target };
+            const labels = { file: 'create →', folder: 'create →', rename: 'rename →', delete: 'delete' };
+            let input = null;
+            if (isName) {
+                input = h('input', { type: 'text', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Name', placeholder: f.kind === 'folder' ? 'folder-name' : 'untitled.md' });
+                input.value = f.name || '';
+            }
+            const deleteHint = f.type === 'dir'
+                ? 'delete folder ' + f.target + (f.count ? ' and the ' + plural(f.count, 'item') + ' inside' : '') + '? it disappears from here (git history keeps a copy).'
+                : 'delete ' + f.target + '? it disappears from here (git history keeps a copy).';
+            slot.append(h('form', { class: 'md-form', onsubmit: e => { e.preventDefault(); submitListForm(node, here, input ? input.value : ''); } },
+                h('div', { class: 'md-hint' + (isName ? '' : ' strong') }, isName ? hints[f.kind] : deleteHint),
+                isName ? h('div', { class: 'md-name' }, h('span', { class: 'md-name-prefix' }, '~/' + (here ? here + '/' : '')), input) : null,
+                f.error ? h('div', { class: 'md-error' }, f.error) : null,
+                h('div', { class: 'md-form-foot' },
+                    h('button', { type: 'button', class: 'md-text-btn', onclick: closeListForm }, 'cancel'),
+                    h('button', { type: 'submit', class: 'md-btn primary', disabled: f.busy }, f.busy ? 'working…' : labels[f.kind]))));
+            if (input && !f.busy) { input.focus(); input.select(); }
+        }
+
+        async function submitListForm(node, here, raw) {
+            const f = listForm;
+            if (!f || f.busy || !node) return;
+            const full = n => (here ? here + '/' : '') + n;
+            const fail = msg => { f.error = msg; f.name = raw; renderList(); };
+            if (!token) { requestUnlock('that needs a passphrase.', () => submitListForm(node, here, raw)); return; }
+
+            async function run(work, then) {
+                f.busy = true;
+                f.error = '';
+                f.name = raw;
+                renderList();
+                try {
+                    await work();
+                    listForm = null;
+                    if (then) then(); else renderList();
+                } catch (e) {
+                    if (e.status === 401) lock();
+                    f.busy = false;
+                    f.error = describeError(e);
+                    renderList();
+                }
+            }
+
+            if (f.kind === 'delete') {
+                run(() => commitChanges({ message: 'md: delete ' + full(f.target), deletes: [full(f.target)] }));
+                return;
+            }
+            let name = (raw || '').trim().replace(/[\/\\]/g, '');
+            if (!name) return fail('name can\'t be empty');
+            if (name.startsWith('.')) return fail('names can\'t start with a dot');
+            const isFolder = f.kind === 'folder' || (f.kind === 'rename' && f.type === 'dir');
+            if (!isFolder && !/\.md$/i.test(name)) name += '.md';
+            if (!here && RESERVED.has(name)) return fail(name + ' is reserved');
+            if (f.kind === 'rename' && name === f.target) return closeListForm();
+            if ((node.children || []).some(k => k.name === name)) return fail(name + ' already exists here');
+            raw = name;
+
+            if (f.kind === 'folder') {
+                run(() => commitChanges({ message: 'md: new folder ' + full(name), writes: [{ rel: full(name) + '/.keep', content: '' }] }));
+            } else if (f.kind === 'file') {
+                const content = '# ' + name.replace(/\.md$/i, '') + '\n\n';
+                run(() => commitChanges({ message: 'md: create ' + full(name), writes: [{ rel: full(name), content }] }),
+                    () => go([...route.segs, name], { file: true, edit: true }));
+            } else {
+                run(() => commitChanges({ message: 'md: rename ' + full(f.target) + ' -> ' + full(name), moves: [{ from: full(f.target), to: full(name) }] }));
+            }
+        }
+
+        /* ---- file view --------------------------------------------------------------- */
+        const fileEls = { back: $('file-back'), dir: $('file-dir'), name: $('file-name'), dirty: $('file-dirty'), tag: $('file-tag'), actions: $('file-actions'), body: $('file-body'), stats: $('file-stats'), saved: $('file-saved') };
+
+        async function openFileView(rel, edit) {
+            const segs = rel.split('/');
+            file = {
+                rel, dir: segs.slice(0, -1).join('/'), name: segs[segs.length - 1],
+                text: '', savedText: '', mode: 'read', split: true, showRender: true,
+                savedAt: '', error: '', busy: false, flash: false, copied: false,
+                loading: true, missing: false, confirmBack: false, sel: null
+            };
+            document.title = file.name + ' · betterMDshare';
+            showView('file');
+            window.scrollTo(0, 0);
+            paintFileChrome();
+            paintFileBody();
+            let text;
+            try {
+                text = await fetchText(rel);
+            } catch (e) {
+                text = null;
+                file.error = describeError(e);
+            }
+            if (!file || file.rel !== rel || !file.loading) return; // moved on meanwhile
+            file.loading = false;
+            if (text == null) file.missing = true;
+            else {
+                file.text = text;
+                file.savedText = text;
+                if (edit) file.mode = 'edit';
+            }
+            paintFileChrome();
+            paintFileBody();
+        }
+
+        const isDirty = () => !!file && !file.loading && !file.missing && file.text !== file.savedText;
+
+        function paintFileChrome() {
+            if (!file) return;
+            const dirty = isDirty();
+            const editing = file.mode === 'edit';
+            fileEls.back.href = hashFor(file.dir ? file.dir.split('/') : [], false);
+            fileEls.back.lastElementChild.textContent = file.confirmBack ? 'discard changes?' : 'back';
+            fileEls.dir.textContent = '~/' + (file.dir ? file.dir + '/' : '');
+            fileEls.name.textContent = file.name;
+            fileEls.dirty.hidden = !dirty;
+            fileEls.tag.textContent = editing ? 'editing' : 'read only';
+            fileEls.tag.hidden = file.loading || file.missing;
+
+            const actions = fileEls.actions;
+            actions.replaceChildren();
+            if (!file.loading && !file.missing) {
+                if (!editing) {
+                    actions.append(
+                        h('button', { type: 'button', class: 'md-btn wide', onclick: copyMd }, file.copied ? 'copied' : 'copy md'),
+                        h('button', { type: 'button', class: 'md-btn', onclick: () => gated('writes need a passphrase. reading is always open.', enterEdit) }, 'edit'),
+                        h('button', { type: 'button', class: 'md-btn' + (file.showRender ? ' is-on' : ''), 'aria-pressed': String(file.showRender), onclick: () => { file.showRender = !file.showRender; paintFileChrome(); paintFileBody(); } }, 'render'));
+                } else {
+                    actions.append(
+                        h('button', { type: 'button', class: 'md-btn ghost', onclick: exitEdit }, 'done'),
+                        h('button', { type: 'button', class: 'md-btn wide', disabled: file.busy || (!dirty && !file.flash), onclick: saveFile }, file.busy ? 'saving…' : (file.flash ? 'saved' : 'save')),
+                        h('button', { type: 'button', class: 'md-btn' + (file.split ? ' is-on' : ''), 'aria-pressed': String(file.split), onclick: toggleSplit }, 'render'));
+                }
+            }
+
+            const words = file.text.trim() ? file.text.trim().split(/\s+/).length : 0;
+            fileEls.stats.textContent = file.loading || file.missing ? '' : plural(words, 'word') + ' · ' + plural(file.text.length, 'char');
+            fileEls.saved.textContent = file.loading ? 'loading…'
+                : file.missing ? ''
+                : file.error ? 'save failed: ' + file.error
+                : file.savedAt || (dirty ? 'unsaved changes' : (editing ? 'edit mode' : (token ? 'unlocked' : 'read only')));
+        }
+
+        function paintFileBody() {
+            const body = fileEls.body;
+            body.replaceChildren();
+            if (!file) return;
+            if (file.loading) {
+                body.append(h('div', { class: 'md-file-body' }, h('div', { class: 'md-render md-muted' }, 'loading…')));
+                return;
+            }
+            if (file.missing) {
+                body.append(h('div', { class: 'md-file-body' }, h('div', { class: 'md-render md-muted' },
+                    'nothing at ~/' + file.rel + (file.error ? ' — ' + file.error : '') + '. ',
+                    h('a', { href: fileEls.back.href }, 'back to the folder'))));
+                return;
+            }
+            if (file.mode === 'read') {
+                const wrap = h('div', { class: 'md-file-body' });
+                if (file.showRender) {
+                    const rendered = h('div', { class: 'md-render' });
+                    rendered.innerHTML = md.render(file.text, { baseDir: file.dir });
+                    wrap.append(rendered);
+                } else {
+                    wrap.append(h('pre', { class: 'md-source', onclick: e => {
+                        const range = document.createRange();
+                        range.selectNodeContents(e.currentTarget);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    } }, file.text));
+                }
+                body.append(wrap);
+                return;
+            }
+
+            const ta = h('textarea', { spellcheck: 'false', 'aria-label': 'Markdown source', placeholder: '# start writing' });
+            ta.value = file.text;
+            const preview = h('div', { class: 'md-render' });
+            const refresh = () => { preview.innerHTML = md.render(file.text, { baseDir: file.dir }); };
+            let timer = null;
+            ta.addEventListener('input', () => {
+                file.text = ta.value;
+                file.flash = false;
+                file.error = '';
+                file.confirmBack = false;
+                paintFileChrome();
+                if (file.split) { clearTimeout(timer); timer = setTimeout(refresh, 90); }
+            });
+            ta.addEventListener('keydown', e => {
+                if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); saveFile(); }
+            });
+            body.append(h('div', { class: 'md-editor' + (file.split ? ' is-split' : '') },
+                h('div', { class: 'md-editor-pane' }, ta),
+                file.split ? h('div', { class: 'md-editor-pane md-preview' },
+                    h('div', { class: 'md-preview-head' },
+                        h('span', { class: 'md-preview-label' }, 'preview'),
+                        h('button', { type: 'button', class: 'md-preview-close', 'aria-label': 'Close preview', onclick: toggleSplit }, '×')),
+                    preview) : null));
+            if (file.split) refresh();
+            const sel = file.sel || { start: ta.value.length, end: ta.value.length };
+            file.sel = null;
+            ta.focus({ preventScroll: true });
+            try { ta.setSelectionRange(sel.start, sel.end); } catch (e) {}
+        }
+
+        function enterEdit() {
+            if (!file || file.loading || file.missing) return;
+            file.mode = 'edit';
+            file.savedAt = '';
+            paintFileChrome();
+            paintFileBody();
+        }
+
+        function exitEdit() {
+            if (!file) return;
+            file.mode = 'read';
+            file.savedAt = '';
+            paintFileChrome();
+            paintFileBody();
+        }
+
+        function toggleSplit() {
+            const ta = fileEls.body.querySelector('textarea');
+            if (ta) file.sel = { start: ta.selectionStart, end: ta.selectionEnd };
+            file.split = !file.split;
+            paintFileChrome();
+            paintFileBody();
+        }
+
+        function copyMd() {
+            if (!file) return;
+            navigator.clipboard.writeText(file.text).then(() => {
+                file.copied = true;
+                paintFileChrome();
+                setTimeout(() => { if (file) { file.copied = false; paintFileChrome(); } }, 1400);
+            }).catch(() => {});
+        }
+
+        async function saveFile() {
+            if (!file || file.busy || !isDirty()) return;
+            if (!token) { requestUnlock('saving needs a passphrase.', saveFile); return; }
+            const current = file;
+            current.busy = true;
+            current.error = '';
+            paintFileChrome();
+            try {
+                await commitChanges({ message: 'md: update ' + current.rel, writes: [{ rel: current.rel, content: current.text }] });
+                current.savedText = current.text;
+                current.savedAt = 'saved ' + clock();
+                current.flash = true;
+                setTimeout(() => { if (file === current) { current.flash = false; paintFileChrome(); } }, 1200);
+            } catch (e) {
+                if (e.status === 401) lock();
+                current.error = describeError(e);
+            } finally {
+                current.busy = false;
+                if (file === current) paintFileChrome();
+            }
+        }
+
+        fileEls.back.addEventListener('click', function (e) {
+            if (!file) return;
+            if (isDirty() && !file.confirmBack) {
+                e.preventDefault();
+                file.confirmBack = true;
+                paintFileChrome();
+            }
+        });
+
+        /* ---- wiring ------------------------------------------------------------------- */
+        $('new-file').addEventListener('click', () => gated('creating files needs a passphrase.', () => openListForm({ kind: 'file' })));
+        $('new-folder').addEventListener('click', () => gated('creating folders needs a passphrase.', () => openListForm({ kind: 'folder' })));
+
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Escape') return;
+            if (!auth.el.hidden) closeAuth();
+            else if (listForm && !listForm.busy) closeListForm();
+        });
+
+        window.addEventListener('hashchange', routeNow);
+        window.addEventListener('beforeunload', e => {
+            if (isDirty()) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        (async function init() {
+            const first = parseHash();
+            const looksLikeFile = first.segs.length && !first.trailing && /\.[a-z0-9]+$/i.test(first.segs[first.segs.length - 1]);
+            showView(looksLikeFile ? 'file' : 'list');
+            await loadTree();
+            routeNow();
+        })();
+    })();
+    </script>
+</body>
+</html>

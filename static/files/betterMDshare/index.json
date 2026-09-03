@@ -1,0 +1,45 @@
+{
+  "generated": "2026-09-03T16:41:44Z",
+  "root": {
+    "name": "~",
+    "type": "dir",
+    "children": [
+      {
+        "name": "notes",
+        "type": "dir",
+        "children": [
+          {
+            "name": "ece391-locks.md",
+            "type": "file",
+            "size": 301,
+            "mtime": "2026-09-02T22:49:15Z"
+          },
+          {
+            "name": "interview-prep.md",
+            "type": "file",
+            "size": 647,
+            "mtime": "2026-09-02T22:49:42Z"
+          },
+          {
+            "name": "reading-list.md",
+            "type": "file",
+            "size": 426,
+            "mtime": "2026-09-02T22:49:42Z"
+          }
+        ]
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "size": 269,
+        "mtime": "2026-09-02T22:48:58Z"
+      },
+      {
+        "name": "todo.md",
+        "type": "file",
+        "size": 96,
+        "mtime": "2026-09-02T22:49:15Z"
+      }
+    ]
+  }
+}
