@@ -6,6 +6,8 @@ Team Members:
 - Michael McNally (mm153)
 - Liwei Koh (liweitk2)
 
+Sponsored by Dr. Joy O'Keefe and the Human-Wildlife Interactions Lab
+
 # Problem
 
 Reliable heterodyne bat-call detectors are difficult to obtain for under $150 in the United States. Affordable options such as the Magenta Electronics Bat4 (approximately £80) generally require international purchasing and shipping, while comparable devices available in the US, such as the Elekon BATSCANNER (approximately $395), are significantly more expensive. This limits researchers, students, and bat enthusiasts who want an affordable and accessible way to detect and listen to ultrasonic bat calls.
