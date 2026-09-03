@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-03T18:05:59.321Z",
+  "generated": "2026-09-03T18:14:03.192Z",
   "root": {
     "name": "~",
     "type": "dir",
@@ -11,8 +11,8 @@
           {
             "name": "RFA-Bat-Detector.md",
             "type": "file",
-            "size": 20,
-            "mtime": "2026-09-03T18:05:59.321Z"
+            "size": 3207,
+            "mtime": "2026-09-03T18:14:03.192Z"
           }
         ]
       },
