@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-03T17:55:37.611Z",
+  "generated": "2026-09-03T17:56:06.883Z",
   "root": {
     "name": "~",
     "type": "dir",
@@ -8,30 +8,6 @@
         "name": "ECE445",
         "type": "dir",
         "children": []
-      },
-      {
-        "name": "notes",
-        "type": "dir",
-        "children": [
-          {
-            "name": "ece391-locks.md",
-            "type": "file",
-            "size": 301,
-            "mtime": "2026-09-02T22:49:15Z"
-          },
-          {
-            "name": "interview-prep.md",
-            "type": "file",
-            "size": 647,
-            "mtime": "2026-09-02T22:49:42Z"
-          },
-          {
-            "name": "reading-list.md",
-            "type": "file",
-            "size": 426,
-            "mtime": "2026-09-02T22:49:42Z"
-          }
-        ]
       },
       {
         "name": "README.md",
