@@ -37,7 +37,7 @@ Build a portable heterodyne bat detector with a 3D-printed housing that is able 
 
 ## Power Subsystem
 
-* Uses a 4×AA battery pack to provide portable power to the entire system.
+* Uses a 4×AA battery pack as the main power source for the device. A voltage regulator is used to provide a stable supply voltage to the microphone, processing, heterodyne, display, and audio subsystems. Basic filtering and an on/off switch are included to help provide clean and controllable power throughout the system.
 
 ## Display Subsystem
 
