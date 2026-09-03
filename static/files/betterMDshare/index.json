@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-03T17:39:15.681Z",
+  "generated": "2026-09-03T17:41:21.554Z",
   "root": {
     "name": "~",
     "type": "dir",
@@ -38,12 +38,6 @@
         "type": "file",
         "size": 269,
         "mtime": "2026-09-02T22:48:58Z"
-      },
-      {
-        "name": "theo.md",
-        "type": "file",
-        "size": 8,
-        "mtime": "2026-09-03T17:39:15.681Z"
       },
       {
         "name": "todo.md",
