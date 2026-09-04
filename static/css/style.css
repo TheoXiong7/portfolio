@@ -123,6 +123,59 @@ a:hover {
     height: 17px;
 }
 
+.footer-text {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+.back-link-wrap {
+    margin-bottom: 14px;
+}
+
+.back-link {
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    opacity: 1;
+}
+
+/* plain text pages (privacy.html) */
+
+.prose p,
+.prose li {
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 560px;
+}
+
+.prose p {
+    margin: 0 0 14px;
+}
+
+.prose ul {
+    margin: 0 0 14px 20px;
+}
+
+.prose li {
+    margin: 6px 0;
+}
+
+.prose .section > :last-child {
+    margin-bottom: 0;
+}
+
+.prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13.5px;
+    background: var(--hover);
+    padding: 1px 5px;
+    border-radius: 4px;
+}
+
 .section {
     margin-bottom: 60px;
 }
@@ -621,6 +674,7 @@ body.image-zoom-open {
     .image-zoom-media,
     .image-zoom-close,
     .image-zoom-caption,
+    .back-link,
     .md-btn,
     .md-text-btn,
     .md-crumb,

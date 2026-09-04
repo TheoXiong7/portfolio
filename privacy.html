@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy · Theo Xiong</title>
+    <meta name="description" content="What theoxiong.com collects when you visit, and how to opt out.">
+    <meta name="author" content="Theo Xiong">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/files/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/files/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/files/favicons/favicon-16x16.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&display=swap">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <!-- Theme (set before paint to prevent flash) -->
+    <script>
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = stored || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="page prose">
+        <div class="header">
+            <div class="back-link-wrap"><a class="back-link" href="./">← theo xiong</a></div>
+            <div class="name">Privacy</div>
+            <!-- <div class="location">Updated 3 September 2026</div> -->
+        </div>
+
+        <div class="section">
+            <div class="section-title">Analytics</div>
+            <p>The site uses Google Analytics to count visits. When a page loads, Google's script records the page you viewed and when, your browser and device type, the site that sent you here, and a rough location derived from your IP address, which Google truncates before storing. It sets first-party cookies (<code>_ga</code> and <code>_ga_…</code>) so returning visitors aren't counted as new ones; they last up to two years.</p>
+            <p>Google processes this data under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>. What Google does with data from sites like this one is described at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Opting out</div>
+            <ul>
+                <li>Install Google's <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Analytics opt-out add-on</a>.</li>
+                <li>Or block <code>googletagmanager.com</code> with a content blocker.</li>
+                <li>Or clear your cookies whenever you like.</li>
+            </ul>
+            <p>The site works exactly the same either way.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Contact</div>
+            <p>Questions about any of this: <a href="mailto:tyxiong2@illinois.edu">tyxiong2@illinois.edu</a>.</p>
+        </div>
+
+        <div class="footer">
+            <span>© 2026 Theodore Xiong</span>
+        </div>
+    </div>
+</body>
+</html>
