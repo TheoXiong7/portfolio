@@ -694,12 +694,10 @@ body.image-zoom-open {
 
 /* ---- GitHub skyline (fixed bottom-right widget, static/js/skyline.js) ---- */
 
+/* in the page flow at the end of the column; a fixed corner card on wide screens */
 .skyline {
-    position: fixed;
-    right: 28px;
-    bottom: 28px;
-    z-index: 90;
-    width: 380px;
+    width: 100%;
+    margin-top: 100px;
     padding: 12px 12px 10px;
     border: 1px solid var(--rule);
     border-radius: 10px;
@@ -890,18 +888,33 @@ body.image-zoom-open {
     white-space: nowrap;
 }
 
-/* step aside while a project is open or an image is zoomed */
-body.panel-open .skyline,
-body.image-zoom-open .skyline,
-body:has(.project-detail.open) .skyline {
-    opacity: 0;
-    pointer-events: none;
+/* with clear air to the right of the 720px column it floats in the corner */
+@media (min-width: 1240px) {
+    .skyline {
+        position: fixed;
+        right: 28px;
+        bottom: 28px;
+        z-index: 90;
+        width: 380px;
+        margin-top: 0;
+    }
+
+    /* step aside while a project is open or an image is zoomed */
+    body.panel-open .skyline,
+    body.image-zoom-open .skyline,
+    body:has(.project-detail.open) .skyline {
+        opacity: 0;
+        pointer-events: none;
+    }
 }
 
-/* needs clear air to the right of the 720px column */
-@media (max-width: 1239px) {
+@media (max-width: 640px) {
     .skyline {
-        display: none;
+        margin-top: 60px;
+    }
+
+    .skyline-foot {
+        flex-wrap: wrap;
     }
 }
 
