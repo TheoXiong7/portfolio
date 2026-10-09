@@ -682,8 +682,226 @@ body.image-zoom-open {
     .md-row-actions,
     .md-input,
     .md-name,
-    .md-file-head {
+    .md-file-head,
+    .skyline,
+    .skyline-tip,
+    .skyline-legend button,
+    .skyline-toggle-thumb,
+    .skyline-toggle button {
         transition: none !important;
+    }
+}
+
+/* ---- GitHub skyline (fixed bottom-right widget, static/js/skyline.js) ---- */
+
+.skyline {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 90;
+    width: 380px;
+    padding: 12px 12px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--fg);
+    transition: opacity 0.3s ease, background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+.skyline[hidden] {
+    display: none;
+}
+
+.skyline-chart {
+    position: relative;
+}
+
+.skyline-stage {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 6px;
+    outline-offset: 4px;
+}
+
+.skyline-stage:has(:focus-visible) {
+    outline: 2px solid var(--fg);
+}
+
+.skyline-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    outline: none;
+}
+
+.skyline-tip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 6px 9px;
+    border-radius: 5px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.skyline-tip.show {
+    opacity: 1;
+}
+
+.skyline-tip strong {
+    font-weight: 600;
+}
+
+.skyline-tip-date {
+    opacity: 0.75;
+}
+
+.skyline-tip-arrow {
+    position: absolute;
+    top: 100%;
+    left: var(--arrow, 50%);
+    margin-left: -5px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--fg);
+}
+
+.skyline-foot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.skyline-caption {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+    opacity: 0.5;
+}
+
+.skyline-caption:hover,
+.skyline-caption:focus-visible {
+    opacity: 1;
+}
+
+.skyline-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.skyline-legend button {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.12);
+    cursor: pointer;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+.skyline-legend button:hover {
+    transform: scale(1.25);
+}
+
+.skyline-legend button:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 1px;
+}
+
+.skyline-toggle {
+    position: relative;
+    display: inline-flex;
+    padding: 2px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+}
+
+.skyline-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    width: 26px;
+    border-radius: 4px;
+    background: var(--fg);
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.35s ease;
+}
+
+.skyline.is-3d .skyline-toggle-thumb {
+    transform: translateX(100%);
+}
+
+.skyline-toggle button {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--fg);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: color 0.5s ease, opacity 0.5s ease;
+}
+
+.skyline-toggle button[aria-pressed="true"] {
+    color: var(--bg);
+    opacity: 1;
+}
+
+.skyline-toggle button:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+}
+
+.skyline-toggle svg {
+    display: block;
+    width: 13px;
+    height: 13px;
+}
+
+.skyline-live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* step aside while a project is open or an image is zoomed */
+body.panel-open .skyline,
+body.image-zoom-open .skyline,
+body:has(.project-detail.open) .skyline {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* needs clear air to the right of the 720px column */
+@media (max-width: 1239px) {
+    .skyline {
+        display: none;
     }
 }
 

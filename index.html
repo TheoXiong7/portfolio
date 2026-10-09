@@ -174,10 +174,7 @@
         <div class="section">
             <div class="section-title">Projects</div>
             <div class="entry">
-                <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-expanded="false">swe jobs aggregator</a></div>
-            </div>
-            <div class="entry">
-                <div class="entry-title"><a href="#" class="project-link" data-project="bettermdshare" aria-expanded="false">betterMDshare</a></div>
+                <div class="entry-title"><a href="#" class="project-link" data-project="swe-jobs" aria-expanded="false">swe job lists</a></div>
             </div>
             <div class="entry">
                 <div class="entry-title"><a href="#" class="project-link" data-project="top-hair-salon" aria-expanded="false">Top Hair Salon C-U</a></div>
@@ -190,6 +187,7 @@
             </div>
             <div id="archives" class="archives">
                 <div class="entry">
+                    <div class="entry-title"><a href="#" class="project-link" data-project="bettermdshare" aria-expanded="false">betterMDshare</a></div>
                     <div class="entry-title"><a href="#" class="project-link" data-project="useless-donut" aria-expanded="false">useless donut</a></div>
                     <div class="entry-title"><a href="#" class="project-link" data-project="betgloballive" aria-expanded="false">betglobal</a></div>
                     <div class="entry-title"><a href="#" class="project-link" data-project="uiucinema" aria-expanded="false">uiucinema</a></div>
@@ -246,6 +244,40 @@
             </a>
         </div>
     </div>
+
+    <aside id="skyline" class="skyline" aria-label="GitHub activity" hidden>
+        <div class="skyline-chart">
+            <div class="skyline-stage">
+                <canvas class="skyline-canvas" tabindex="0" role="img" aria-label="GitHub contributions over the last year"></canvas>
+            </div>
+            <div class="skyline-tip" role="tooltip" aria-hidden="true">
+                <span class="skyline-tip-text"></span>
+                <span class="skyline-tip-arrow" aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="skyline-foot">
+            <a class="skyline-caption" href="https://github.com/TheoXiong7" target="_blank" rel="noopener"></a>
+            <div class="skyline-legend" aria-label="Activity levels"></div>
+            <div class="skyline-toggle" role="group" aria-label="Chart view">
+                <span class="skyline-toggle-thumb" aria-hidden="true"></span>
+                <button type="button" data-view="2d" aria-pressed="false" aria-label="Flat heat map" title="Flat heat map">
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1" fill="currentColor"></rect>
+                        <rect x="9" y="1.5" width="5.5" height="5.5" rx="1" fill="currentColor"></rect>
+                        <rect x="1.5" y="9" width="5.5" height="5.5" rx="1" fill="currentColor"></rect>
+                        <rect x="9" y="9" width="5.5" height="5.5" rx="1" fill="currentColor"></rect>
+                    </svg>
+                </button>
+                <button type="button" data-view="3d" aria-pressed="true" aria-label="3D skyline" title="3D skyline">
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <path d="M8 1.2 14.2 4.6v6.8L8 14.8 1.8 11.4V4.6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+                        <path d="M1.8 4.6 8 8l6.2-3.4M8 8v6.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <p class="skyline-live" aria-live="polite"></p>
+    </aside>
 
     <aside class="project-panel" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="panel-title">
         <button type="button" class="panel-close" aria-label="Close details">
@@ -690,5 +722,7 @@
             });
         })();
     </script>
+    <script src="static/files/contributions.js" defer></script>
+    <script src="static/js/skyline.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,39 @@
+# Keeps the skyline widget current: refreshes static/files/contributions.js from
+# GitHub's contribution calendar once a day and commits it when it changed.
+# Each commit redeploys Pages (one build a day, well under the ~10/hour limit).
+name: refresh contributions
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # daily, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-contributions
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the calendar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/contributions.py "${{ github.repository_owner }}"
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- static/files/contributions.js; then
+            echo "no change"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/files/contributions.js
+          git commit -m "skyline: refresh contributions"
+          git push
