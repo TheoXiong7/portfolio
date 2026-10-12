@@ -248,7 +248,7 @@
         // morph: t is linear time 0 (2D) -> 1 (3D); the camera eases it, the bars wave it
         let t = 0;
         let target = 0;
-        let goal = 1;
+        let goal = 0;
         // orbit offsets, eased toward their goals
         let yaw = 0;
         let elev = 0;
@@ -760,8 +760,7 @@
         root.hidden = false;
         retheme();
         relayout();
-        if (reduced) t = goal;
-        setView('3d'); // the skyline rises out of the flat map on first paint
+        setView('2d'); // starts as the flat map; the skyline only rises when asked for
 
         new ResizeObserver(() => {
             if (Math.round(stage.clientWidth) !== W) relayout();
