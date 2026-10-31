@@ -111,26 +111,219 @@ a:hover {
     font-size: 13px;
 }
 
-.footer-social {
+.social-link {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     text-decoration: none;
 }
 
-.footer-social svg {
+.social-link > span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+
+.social-link svg {
     display: block;
-    width: 17px;
-    height: 17px;
+    width: 13px;
+    height: 13px;
+    flex: none;
+    opacity: 0.65;
+}
+
+.footer-signature {
+    display: block;
+    width: 132px;
+    max-width: 30%;
+    height: auto;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+}
+
+[data-theme="dark"] .footer-signature {
+    filter: invert(1);
 }
 
 .footer-text {
     display: inline-flex;
     align-items: baseline;
-    gap: 14px;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    min-width: 0;
+}
+
+.footer-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.footer-link:hover {
+    opacity: 0.5;
 }
 
 .back-link-wrap {
     margin-bottom: 14px;
+}
+
+/* A bottom-anchored grid reveal unfurls the privacy sheet upward. */
+body.privacy-open {
+    overflow: hidden;
+}
+
+.privacy-scroll {
+    position: fixed;
+    inset: auto auto var(--privacy-bottom, 60px) var(--privacy-left, 40px);
+    display: none;
+    width: var(--privacy-width, min(640px, calc(100vw - 48px)));
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--fg);
+    overflow: visible;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.24s ease;
+}
+
+.privacy-scroll[open] {
+    display: grid;
+}
+
+.privacy-scroll::backdrop {
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    transition: backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                -webkit-backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.4s ease;
+}
+
+.privacy-scroll.open::backdrop {
+    background: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.privacy-scroll.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.3s ease 0.05s;
+}
+
+.privacy-scroll-inner {
+    min-height: 0;
+    overflow: hidden;
+    transform: translateY(8px);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.privacy-scroll.open .privacy-scroll-inner {
+    transform: translateY(0);
+}
+
+/* The folded edge follows the top of the sheet as it rises. */
+.privacy-scroll::after {
+    content: "";
+    position: absolute;
+    inset-inline: 1px;
+    top: 0;
+    height: 14px;
+    border-top: 1px solid var(--rule);
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(to top, transparent, var(--hover) 65%, var(--bg));
+    pointer-events: none;
+}
+
+.privacy-sheet {
+    max-height: var(--privacy-height, calc(100dvh - 84px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 24px 28px 32px;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--bg);
+    font-size: 14px;
+}
+
+.privacy-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.privacy-sheet-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+}
+
+.privacy-sheet-header h2:focus {
+    outline: none;
+}
+
+.privacy-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0 6px 8px;
+    border: 0;
+    background: none;
+    color: var(--fg);
+    font: inherit;
+    font-size: 13px;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.privacy-close:hover,
+.privacy-close:focus-visible {
+    opacity: 1;
+}
+
+.privacy-close svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.privacy-content > :last-child {
+    margin-bottom: 0;
+}
+
+.privacy-content.prose p,
+.privacy-content.prose li {
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+    .privacy-sheet {
+        padding: 20px 20px 28px;
+    }
 }
 
 .back-link {
@@ -143,7 +336,7 @@ a:hover {
     opacity: 1;
 }
 
-/* plain text pages (privacy.html) */
+/* Privacy policy prose */
 
 .prose p,
 .prose li {
@@ -225,6 +418,7 @@ a:hover {
 
 .archives {
     display: grid;
+    padding-inline-start: 24px;
     grid-template-rows: 0fr;
     opacity: 0;
     visibility: hidden;
@@ -251,6 +445,24 @@ a:hover {
 
 .archives.open > * {
     transform: translateY(0);
+}
+
+.archives > .entry > .entry-title {
+    position: relative;
+    padding-block: 3px;
+}
+
+.archives > .entry > .entry-title::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -16px;
+    top: calc(3px + 0.55em - 8px);
+    width: 8px;
+    height: 8px;
+    border-inline-start: 1px solid currentColor;
+    border-block-end: 1px solid currentColor;
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .stack {
@@ -582,6 +794,22 @@ body.image-zoom-open {
     }
 }
 
+@media (max-width: 640px), (hover: none) and (pointer: coarse) {
+    html,
+    body {
+        overflow-x: clip;
+        overscroll-behavior: none;
+        touch-action: pan-y pinch-zoom;
+    }
+
+    .project-panel,
+    .privacy-sheet {
+        overflow-x: hidden;
+        overscroll-behavior: none;
+        touch-action: pan-y pinch-zoom;
+    }
+}
+
 @media (max-width: 640px) {
     body {
         font-size: 14px;
@@ -662,6 +890,10 @@ body.image-zoom-open {
 
 @media (prefers-reduced-motion: reduce) {
     body,
+    .privacy-scroll,
+    .privacy-scroll::backdrop,
+    .privacy-scroll-inner,
+    .privacy-close,
     .archives,
     .archives > *,
     .archives-toggle .triangle,
@@ -690,7 +922,6 @@ body.image-zoom-open {
 .skyline {
     width: 100%;
     padding: 12px 12px 10px;
-    border: 1px solid var(--rule);
     border-radius: 10px;
     background: var(--bg);
     color: var(--fg);
