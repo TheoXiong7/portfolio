@@ -1120,20 +1120,6 @@ body.image-zoom-open {
 }
 
 @media (pointer: coarse) {
-    .entry-title > a {
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-    }
-
-    .archives > .entry > .entry-title {
-        padding-block: 0;
-    }
-
-    .archives > .entry > .entry-title::before {
-        top: 14px;
-    }
-
     .theme-toggle,
     .privacy-close,
     .panel-close,
