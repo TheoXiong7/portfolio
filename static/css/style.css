@@ -61,6 +61,13 @@ a:hover {
     opacity: 0.5;
 }
 
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
 .header {
     margin-bottom: 80px;
 }
@@ -87,6 +94,7 @@ a:hover {
 }
 
 .location {
+    line-height: 1.4;
     opacity: 0.5;
     font-size: 14px;
 }
@@ -107,29 +115,7 @@ a:hover {
     margin-top: 100px;
     padding-top: 40px;
     border-top: 1px solid var(--rule);
-    opacity: 0.5;
     font-size: 13px;
-}
-
-.social-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-}
-
-.social-link > span {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-}
-
-.social-link svg {
-    display: block;
-    width: 13px;
-    height: 13px;
-    flex: none;
-    opacity: 0.65;
 }
 
 .footer-signature {
@@ -139,6 +125,7 @@ a:hover {
     height: auto;
     flex-shrink: 0;
     margin-inline-start: auto;
+    opacity: 0.75;
 }
 
 [data-theme="dark"] .footer-signature {
@@ -151,6 +138,7 @@ a:hover {
     flex-wrap: wrap;
     gap: 8px 14px;
     min-width: 0;
+    opacity: 0.6;
 }
 
 .footer-link {
@@ -500,7 +488,7 @@ body.privacy-open {
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease, background-color 0.35s ease, border-color 0.35s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s, background-color 0.35s ease, border-color 0.35s ease;
     z-index: 10;
 }
 
@@ -508,6 +496,7 @@ body.privacy-open {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    transition-delay: 0s;
 }
 
 .panel-close {
@@ -563,6 +552,8 @@ body.privacy-open {
 
 .panel-content p {
     margin-bottom: 16px;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
 .panel-figure {
@@ -910,6 +901,7 @@ body.image-zoom-open {
     .skyline,
     .skyline-tip,
     .skyline-legend button,
+    .skyline-legend button::before,
     .skyline-toggle-thumb,
     .skyline-toggle button {
         transition: none !important;
@@ -1026,17 +1018,27 @@ body.image-zoom-open {
 }
 
 .skyline-legend button {
+    display: grid;
+    place-items: center;
     width: 10px;
     height: 10px;
     padding: 0;
     border: 0;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.12);
+    background: none;
     cursor: pointer;
+}
+
+.skyline-legend button::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--swatch);
+    box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.12);
     transition: background-color 0.5s ease, transform 0.5s ease;
 }
 
-.skyline-legend button:hover {
+.skyline-legend button:hover::before {
     transform: scale(1.25);
 }
 
@@ -1108,6 +1110,77 @@ body.image-zoom-open {
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
+}
+
+.skyline-day-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+@media (pointer: coarse) {
+    .entry-title > a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    .archives > .entry > .entry-title {
+        padding-block: 0;
+    }
+
+    .archives > .entry > .entry-title::before {
+        top: 14px;
+    }
+
+    .theme-toggle,
+    .privacy-close,
+    .panel-close,
+    .footer-link,
+    .panel-visit,
+    .skyline-day-link {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .theme-toggle {
+        width: 44px;
+        justify-content: center;
+    }
+
+    .skyline-foot {
+        flex-wrap: wrap;
+    }
+
+    .skyline-caption {
+        flex-basis: 100%;
+        white-space: normal;
+        line-height: 1.5;
+    }
+
+    .skyline-legend {
+        gap: 0;
+    }
+
+    .skyline-legend button {
+        width: 24px;
+        height: 44px;
+    }
+
+    .skyline-toggle {
+        margin-inline-start: auto;
+    }
+
+    .skyline-toggle button {
+        width: 44px;
+        height: 44px;
+    }
+
+    .skyline-toggle-thumb {
+        width: 44px;
+    }
 }
 
 @media (max-width: 640px) {

@@ -26,6 +26,7 @@
     const tip = root.querySelector('.skyline-tip');
     const tipText = root.querySelector('.skyline-tip-text');
     const caption = root.querySelector('.skyline-caption');
+    const dayLink = root.querySelector('.skyline-day-link');
     const legend = root.querySelector('.skyline-legend');
     const toggle = root.querySelector('.skyline-toggle');
     const live = root.querySelector('.skyline-live');
@@ -233,14 +234,21 @@
             b.setAttribute('aria-label', 'Highlight ' + name.toLowerCase() + ' days');
             b.setAttribute('aria-pressed', 'false');
             b.title = name;
-            b.addEventListener('mouseenter', () => setLegend(i));
-            b.addEventListener('focus', () => setLegend(i));
-            b.addEventListener('blur', () => setLegend(-1));
-            b.addEventListener('click', () => setLegend(legendLevel === i ? -1 : i));
+            b.addEventListener('pointerenter', ev => {
+                if (ev.pointerType === 'mouse') setLegend(i);
+            });
+            b.addEventListener('focus', () => {
+                if (b.matches(':focus-visible')) setLegend(i);
+            });
+            b.addEventListener('blur', () => setLegend(selectedLevel));
+            b.addEventListener('click', () => {
+                selectedLevel = selectedLevel === i ? -1 : i;
+                setLegend(selectedLevel);
+            });
             legend.appendChild(b);
             return b;
         });
-        legend.addEventListener('mouseleave', () => setLegend(-1));
+        legend.addEventListener('mouseleave', () => setLegend(selectedLevel));
 
         const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
         let reduced = reduceMq.matches;
@@ -294,6 +302,7 @@
         let pinned = -1;
         let activeIdx = -1;
         let legendLevel = -1;
+        let selectedLevel = -1;
         let tipW = 0;
         let raf = 0;
         let last = 0;
@@ -312,7 +321,7 @@
                 col.set(colGoal);
                 colReady = true;
             }
-            all.forEach((c, k) => { swatches[k].style.background = rgbString(c[0], c[1], c[2]); });
+            all.forEach((c, k) => { swatches[k].style.setProperty('--swatch', rgbString(c[0], c[1], c[2])); });
             kick();
         };
 
@@ -590,6 +599,14 @@
             tip.classList.toggle('show', !!c);
             tip.setAttribute('aria-hidden', c ? 'false' : 'true');
             if (c) {
+                if (dayLink) {
+                    const url = new URL(caption.href);
+                    url.searchParams.set('tab', 'overview');
+                    url.searchParams.set('from', c.date);
+                    url.searchParams.set('to', c.date);
+                    dayLink.href = url.href;
+                    dayLink.setAttribute('aria-label', 'View GitHub activity for ' + dfl.format(dayMs(c.date)));
+                }
                 tipText.replaceChildren();
                 const strong = document.createElement('strong');
                 strong.textContent = c.count ? nf.format(c.count) + ' ' + noun(c.count) : 'No contributions';
